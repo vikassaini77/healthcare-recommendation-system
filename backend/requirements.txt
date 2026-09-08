@@ -1,0 +1,25 @@
+fastapi
+uvicorn
+pydantic
+python-dotenv
+python-multipart
+
+# Machine Learning
+scikit-learn
+pandas
+numpy
+joblib
+
+# Authentication & Security
+python-jose
+passlib[bcrypt]
+email-validator
+
+# Database
+pymongo
+torch
+torchvision
+opencv-python
+pillow
+matplotlib
+google-generativeai
