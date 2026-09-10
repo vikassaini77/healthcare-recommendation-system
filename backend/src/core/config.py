@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api"
 
     # ML Paths (relative to the repo root)
-    REPO_ROOT: str = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    REPO_ROOT: str = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     ML_DATA_PROCESSED_DIR: str = os.path.join(REPO_ROOT, "ml", "data", "processed")
     ML_MODELS_DIR: str = os.path.join(REPO_ROOT, "ml", "models")
 
