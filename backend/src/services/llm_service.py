@@ -8,7 +8,7 @@ def generate_holistic_summary(symptom_prediction: str, patient_profile: dict, xr
         
     try:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-3.6-flash")
         
         prompt = f"You are a medical AI assistant. Summarize the following findings for a patient:\n"
         prompt += f"- Symptoms Prediction: {symptom_prediction}\n"
@@ -31,7 +31,7 @@ def generate_chat_response(messages: list) -> str:
         
     try:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-3.6-flash")
         
         formatted_prompt = "You are MedVision AI, an intelligent medical assistant. You help doctors and patients understand medical data, predict risks, and analyze X-Rays. Always be polite, concise, and remind users that you are an AI and not a substitute for a real doctor.\n\nConversation history:\n"
         
