@@ -217,3 +217,4 @@ export const ChatbotWidget = () => {
     </div>
   );
 };
+export default ChatbotWidget;
