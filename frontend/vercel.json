@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://medvision-api-77.loca.lt/api/$1"
+      "destination": "https://vikassn1-medvision-api.hf.space/api/$1"
     },
     {
       "source": "/(.*)",
