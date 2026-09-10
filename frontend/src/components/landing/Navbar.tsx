@@ -72,7 +72,7 @@ const Navbar = () => {
             <Button variant="ghost" onClick={() => navigate("/dashboard")}>
               Sign In
             </Button>
-            <Button variant="medical" onClick={() => navigate("/dashboard")}>
+            <Button variant="medical" onClick={() => navigate("/demo")}>
               Try Demo
             </Button>
           </div>
@@ -117,7 +117,7 @@ const Navbar = () => {
                 <Button variant="ghost" onClick={() => navigate("/dashboard")} className="w-full">
                   Sign In
                 </Button>
-                <Button variant="medical" onClick={() => navigate("/dashboard")} className="w-full">
+                <Button variant="medical" onClick={() => navigate("/demo")} className="w-full">
                   Try Demo
                 </Button>
               </div>

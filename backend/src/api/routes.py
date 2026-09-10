@@ -18,7 +18,7 @@ router = APIRouter()
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 xray_model = load_model()
-gradcam = GradCAM(xray_model, xray_model.layer4[-1])
+gradcam = GradCAM(xray_model, xray_model.features.denseblock4)
 
 transform = transforms.Compose([
     transforms.Resize((224,224)),
@@ -42,9 +42,11 @@ async def predict_xray(file: UploadFile = File(...)):
     x.requires_grad = True
 
     output = xray_model(x)
-    probs = torch.softmax(output, dim=1)
-    pred_class = torch.argmax(probs, dim=1).item()
-    confidence = probs[0][pred_class].item()
+    probs = torch.sigmoid(output)
+    
+    confidence, pred_class = torch.max(probs, dim=1)
+    confidence = confidence.item()
+    pred_class = pred_class.item()
 
     xray_model.zero_grad()
     output[0, pred_class].backward()
@@ -55,7 +57,16 @@ async def predict_xray(file: UploadFile = File(...)):
     _, buffer = cv2.imencode(".png", heatmap)
     gradcam_b64 = base64.b64encode(buffer).decode()
 
-    label = "Pneumonia" if pred_class == 1 else "Normal"
+    DISEASES = [
+        "Atelectasis", "Cardiomegaly", "Consolidation", "Edema", "Effusion", 
+        "Emphysema", "Fibrosis", "Hernia", "Infiltration", "Mass", "Nodule", 
+        "Pleural_Thickening", "Pneumonia", "Pneumothorax"
+    ]
+    
+    if confidence >= 0.5:
+        label = DISEASES[pred_class]
+    else:
+        label = "No Findings"
     risk = "High" if label == "Pneumonia" and confidence >= 0.75 else "Medium" if label == "Pneumonia" and confidence >= 0.45 else "Low"
 
     return XRayPredictionResponse(
@@ -101,3 +112,4 @@ async def predict_holistic(
         symptom_result=PredictionResponse(**symptom_result),
         holistic_summary=holistic_summary
     )
+

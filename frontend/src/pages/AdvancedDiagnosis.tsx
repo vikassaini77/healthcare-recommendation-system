@@ -53,7 +53,7 @@ const AdvancedDiagnosis = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/symptoms")
+    fetch("/api/symptoms")
       .then((res) => res.json())
       .then((data) => setSymptoms(data.symptoms))
       .catch((err) => console.error("Error fetching symptoms:", err));
@@ -79,7 +79,7 @@ const AdvancedDiagnosis = () => {
 
   const handleHolisticPredict = async () => {
     if (selectedSymptoms.length === 0) {
-      alert("Please select at least one symptom.");
+      toast.error("Please select at least one symptom.");
       return;
     }
     setLoading(true);
@@ -99,7 +99,7 @@ const AdvancedDiagnosis = () => {
     }));
 
     try {
-      const response = await fetch("http://localhost:8000/api/predict_holistic", {
+      const response = await fetch("/api/predict_holistic", {
         method: "POST",
         body: formData,
       });
@@ -123,7 +123,8 @@ const AdvancedDiagnosis = () => {
         medications: data.symptom_result.medications,
         diets: data.symptom_result.diets,
         precautions: data.symptom_result.precautions,
-        imageData: data.xray_result ? data:image/png;base64, : undefined
+        imageData: preview || undefined,
+        gradcamData: data.xray_result ? `data:image/png;base64,${data.xray_result.gradcam}` : undefined
       });
       setActiveScanId(savedScan.id);
 
@@ -247,7 +248,20 @@ const AdvancedDiagnosis = () => {
                         <p className="text-xl font-bold text-primary">{(result.xray_result.confidence * 100).toFixed(1)}%</p>
                       </div>
                     </div>
-                    <img src={`data:image/png;base64,${result.xray_result.gradcam}`} alt="GradCAM" className="w-full rounded-md mt-4" />
+                    <div className="relative w-full mt-4 rounded-md overflow-hidden bg-black">
+                      <img 
+                        src={preview!} 
+                        alt="Original X-Ray" 
+                        className="w-full h-auto object-contain"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <img 
+                          src={`data:image/png;base64,${result.xray_result.gradcam}`} 
+                          alt="GradCAM Overlay" 
+                          className="w-full h-full object-cover mix-blend-screen opacity-80"
+                        />
+                      </div>
+                    </div>
                   </Card>
                 )}
 
@@ -287,3 +301,4 @@ const AdvancedDiagnosis = () => {
 };
 
 export default AdvancedDiagnosis;
+

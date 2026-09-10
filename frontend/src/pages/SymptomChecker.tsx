@@ -27,7 +27,7 @@ const Dashboard = () => {
   const [conditions, setConditions] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/symptoms")
+    fetch("/api/symptoms")
       .then((res) => res.json())
       .then((data) => setSymptoms(data.symptoms))
       .catch((err) => console.error("Error fetching symptoms:", err));
@@ -53,7 +53,7 @@ const Dashboard = () => {
     } : null;
 
     try {
-      const response = await fetch("http://localhost:8000/api/predict_symptoms", {
+      const response = await fetch("/api/predict_symptoms", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -274,3 +274,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

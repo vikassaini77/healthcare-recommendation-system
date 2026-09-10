@@ -14,7 +14,7 @@ import {
 import { Activity, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
-const API_BASE = "http://localhost:8000";
+const API_BASE = "/api";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -69,8 +69,8 @@ const Login = () => {
         toast.success("Account created successfully. Please log in.");
         setIsSignUp(false);
       }
-    } catch (err: any) {
-      toast.error(err.message || "Authentication failed");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Authentication failed");
     } finally {
       setIsLoading(false);
     }
@@ -191,3 +191,4 @@ const Login = () => {
 };
 
 export default Login;
+

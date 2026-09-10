@@ -26,7 +26,7 @@ const Index = () => {
     <>
       {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
       
-      <div className={`min-h-screen bg-background ${showSplash ? "opacity-0" : "opacity-100"} transition-opacity duration-500`}>
+      <div className={`min-h-screen bg-transparent ${showSplash ? "opacity-0" : "opacity-100"} transition-opacity duration-500`}>
         <Navbar />
         <HeroSection />
         <FeaturesSection />

@@ -134,23 +134,43 @@ const Upload = () => {
     await new Promise(r => setTimeout(r, 2000));
 
     // 2. Generate Result
-    const mockResult = getRandomAnalysis();
-    
-    // 3. Update Local State (So you see it now)
-    setAnalysisResult(mockResult);
-    setState("complete");
+    const formData = new FormData();
+    formData.append("file", file);
 
-    // 4. ⚠️ CRITICAL FIX: Update the Global Context/Database
-    // This ensures Dashboard and History show the correct numbers later
-    updateScan(newScan.id, {
-      status: "complete",
-      prediction: mockResult.prediction,
-      confidence: mockResult.confidence, // This saves the 98% (or whatever) to context
-      risk: mockResult.risk,
-      findings: mockResult.findings
-    });
-    
-    toast.success("Analysis complete!");
+    try {
+      const response = await fetch("/api/predict_xray", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      
+      const realResult = {
+        prediction: data.prediction,
+        confidence: Number((data.confidence * 100).toFixed(1)),
+        risk: data.risk_level.toLowerCase(),
+        findings: [data.prediction === "No Findings" ? "No abnormalities detected" : `Detected ${data.prediction}`],
+        attentionAreas: []
+      };
+      
+      // 3. Update Local State (So you see it now)
+      setAnalysisResult(realResult);
+      setState("complete");
+
+      // 4. Update the Global Context/Database
+      updateScan(newScan.id, {
+        status: "complete",
+        prediction: realResult.prediction,
+        confidence: realResult.confidence,
+        risk: realResult.risk,
+        findings: realResult.findings,
+        gradcamData: `data:image/png;base64,${data.gradcam}`
+      });
+      toast.success("Analysis complete!");
+    } catch (error) {
+      toast.error("Failed to analyze image");
+      setState("error");
+      return;
+    }
   };
   // --- 🛠️ FIXED FUNCTION ENDS HERE ---
 
@@ -486,3 +506,4 @@ const Upload = () => {
 };
 
 export default Upload;
+

@@ -8,11 +8,12 @@ from torchvision import models
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 def load_model():
-    model = models.resnet50(weights=None)
-    model.fc = nn.Linear(model.fc.in_features, 2)
+    model = models.densenet121(weights=None)
+    num_ftrs = model.classifier.in_features
+    model.classifier = nn.Linear(num_ftrs, 14)
     
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    model_path = os.path.join(current_dir, "..", "models", "resnet50_pneumonia.pth")
+    model_path = os.path.join(current_dir, "..", "models", "densenet121_nih_14_diseases.pth")
     
     try:
         model.load_state_dict(
@@ -23,4 +24,5 @@ def load_model():
     model.to(DEVICE)
     model.eval()
     return model
+
 

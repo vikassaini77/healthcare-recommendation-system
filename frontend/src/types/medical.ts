@@ -33,6 +33,7 @@ export interface Scan {
   medications?: string[];
   diets?: string[];
   precautions?: string[];
+  gradcamData?: string;
 }
 
 export interface AnalysisResult {

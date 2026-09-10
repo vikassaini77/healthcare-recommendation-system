@@ -49,7 +49,7 @@ const HeroSection = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in-up opacity-0" style={{ animationDelay: "0.3s", animationFillMode: "forwards" }}>
-              <Link to="/dashboard">
+              <Link to="/demo">
                 <Button variant="hero" className="w-full sm:w-auto">
                   Try Live Demo
                   <ArrowRight className="w-5 h-5" />

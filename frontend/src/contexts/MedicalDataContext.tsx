@@ -73,8 +73,23 @@ export function MedicalDataProvider({ children }: { children: React.ReactNode })
   }, [patients, initialized]);
 
   useEffect(() => {
-    if (initialized)
-      localStorage.setItem(SCANS_KEY, JSON.stringify(scans));
+    if (initialized) {
+      try {
+        localStorage.setItem(SCANS_KEY, JSON.stringify(scans));
+      } catch (e) {
+        console.warn("LocalStorage Quota Exceeded. Saving scans without image data.");
+        try {
+          const strippedScans = scans.map(scan => ({
+            ...scan,
+            imageData: undefined,
+            gradcamData: undefined
+          }));
+          localStorage.setItem(SCANS_KEY, JSON.stringify(strippedScans));
+        } catch (e2) {
+          console.error("Failed to save even stripped scans:", e2);
+        }
+      }
+    }
   }, [scans, initialized]);
 
   /* ===================== PATIENTS ===================== */

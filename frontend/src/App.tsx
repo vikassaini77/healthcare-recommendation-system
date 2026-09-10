@@ -1,69 +1,76 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { MedicalDataProvider } from "@/contexts/MedicalDataContext";
-import { AuthProvider } from "@/contexts/AuthContext";
-import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import Index from "./pages/Index";
-import Dashboard from "./pages/Dashboard";
-import SymptomChecker from "./pages/SymptomChecker";
-import AdvancedDiagnosis from "./pages/AdvancedDiagnosis";
-import Upload from "./pages/Upload";
-import Explainability from "./pages/Explainability";
-import History from "./pages/History";
-import Reports from "./pages/Reports";
-import Analytics from "./pages/Analytics";
-import Settings from "./pages/Settings";
-import Technology from "./pages/Technology";
-import Patients from "./pages/Patients";
-import NotFound from "./pages/NotFound";
-import Login from "./pages/auth/Login";
-import Signup from "./pages/auth/Signup";
-import ForgotPassword from "./pages/auth/ForgotPassword";
-import ResetPassword from "@/pages/auth/ResetPassword";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { MedicalDataProvider } from './contexts/MedicalDataContext';
+import { NotificationProvider } from './contexts/NotificationContext';
+import { ThemeProvider } from './components/ThemeProvider';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import AppLayout from './components/layout/AppLayout';
+import BackgroundAnimation from './components/layout/BackgroundAnimation';
+import { Toaster } from 'sonner';
 
-const queryClient = new QueryClient();
+// Pages
+import Index from './pages/Index';
+import Dashboard from './pages/Dashboard';
+import Login from './pages/auth/Login';
+import Signup from './pages/auth/Signup';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
+import Sandbox from './pages/Sandbox';
+import Patients from './pages/Patients';
+import Upload from './pages/Upload';
+import ScanHistory from './pages/History';
+import AdvancedDiagnosis from './pages/AdvancedDiagnosis';
+import Explainability from './pages/Explainability';
+import Reports from './pages/Reports';
+import Analytics from './pages/Analytics';
+import Settings from './pages/Settings';
+import SymptomChecker from './pages/SymptomChecker';
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
+function App() {
+  return (
+    <Router>
       <AuthProvider>
         <MedicalDataProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              {/* Public routes */}
-              <Route path="/" element={<Index />} />
-              <Route path="/technology" element={<Technology />} />
-              <Route path="/auth/login" element={<Login />} />
-              <Route path="/auth/signup" element={<Signup />} />
-              <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-              <Route path="/auth/reset-password" element={<ResetPassword />} />
-              
-              {/* Protected routes */}
-              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-              <Route path="/symptom-checker" element={<ProtectedRoute><SymptomChecker /></ProtectedRoute>} />
-              <Route path="/advanced-diagnosis" element={<ProtectedRoute><AdvancedDiagnosis /></ProtectedRoute>} />
-              <Route path="/upload" element={<ProtectedRoute><Upload /></ProtectedRoute>} />
-              <Route path="/explainability" element={<ProtectedRoute><Explainability /></ProtectedRoute>} />
-              <Route path="/explainability/:scanId" element={<ProtectedRoute><Explainability /></ProtectedRoute>} />
-              <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
-              <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
-              <Route path="/reports/:scanId" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
-              <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
-              <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-              <Route path="/patients" element={<ProtectedRoute><Patients /></ProtectedRoute>} />
-              
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
+          <NotificationProvider>
+            <ThemeProvider defaultTheme="dark" storageKey="medvision-theme">
+              <BackgroundAnimation />
+              <div className="min-h-screen bg-transparent text-foreground flex flex-col">
+              <Toaster position="bottom-right" theme="dark" />
+              <Routes>
+                {/* Public Routes */}
+                <Route path="/auth/login" element={<Login />} />
+                <Route path="/auth/signup" element={<Signup />} />
+                <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+                <Route path="/auth/reset-password" element={<ResetPassword />} />
+                <Route path="/demo" element={<Sandbox />} />
+                
+                <Route path="/" element={<Index />} />
+                
+                {/* Protected Routes */}
+                <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                <Route path="/patients" element={<ProtectedRoute><Patients /></ProtectedRoute>} />
+                <Route path="/upload" element={<ProtectedRoute><Upload /></ProtectedRoute>} />
+                <Route path="/explainability" element={<ProtectedRoute><Explainability /></ProtectedRoute>} />
+                <Route path="/explainability/:scanId" element={<ProtectedRoute><Explainability /></ProtectedRoute>} />
+                <Route path="/symptom-checker" element={<ProtectedRoute><SymptomChecker /></ProtectedRoute>} />
+                <Route path="/advanced-diagnosis" element={<ProtectedRoute><AdvancedDiagnosis /></ProtectedRoute>} />
+                <Route path="/history" element={<ProtectedRoute><ScanHistory /></ProtectedRoute>} />
+                <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+                <Route path="/reports/:scanId" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+                <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+                <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+
+                {/* Catch all */}
+                <Route path="*" element={<Navigate to="/dashboard" replace />} />
+              </Routes>
+              </div>
+            </ThemeProvider>
+          </NotificationProvider>
         </MedicalDataProvider>
       </AuthProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+    </Router>
+  );
+}
 
 export default App;
