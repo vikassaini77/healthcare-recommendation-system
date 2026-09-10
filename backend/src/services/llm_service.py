@@ -24,6 +24,29 @@ def generate_holistic_summary(symptom_prediction: str, patient_profile: dict, xr
         print("Gemini API Error:", e)
         return _fallback_summary(symptom_prediction, xray_prediction, xray_confidence)
 
+def generate_chat_response(messages: list) -> str:
+    api_key = settings.GEMINI_API_KEY
+    if not api_key:
+        return "I am sorry, but my AI capabilities are currently offline. Please provide an API key."
+        
+    try:
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        
+        formatted_prompt = "You are MedVision AI, an intelligent medical assistant. You help doctors and patients understand medical data, predict risks, and analyze X-Rays. Always be polite, concise, and remind users that you are an AI and not a substitute for a real doctor.\n\nConversation history:\n"
+        
+        for msg in messages:
+            role = "Patient/User" if msg.role == "user" else "MedVision AI"
+            formatted_prompt += f"{role}: {msg.content}\n"
+            
+        formatted_prompt += "MedVision AI:"
+        
+        response = model.generate_content(formatted_prompt)
+        return response.text
+    except Exception as e:
+        print("Gemini API Chat Error:", e)
+        return "I apologize, but I am currently having trouble connecting to my AI brain. Please try again later."
+
 def _fallback_summary(symptom_prediction: str, xray_prediction: str = None, xray_confidence: float = None) -> str:
     summary = f"Based on symptoms, the prediction is {symptom_prediction}."
     if xray_prediction:

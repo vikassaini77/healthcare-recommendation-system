@@ -33,3 +33,13 @@ class HolisticPredictionResponse(BaseModel):
     xray_result: Optional[XRayPredictionResponse] = None
     symptom_result: PredictionResponse
     holistic_summary: str
+
+class ChatMessage(BaseModel):
+    role: str
+    content: str
+
+class ChatRequest(BaseModel):
+    messages: List[ChatMessage]
+
+class ChatResponse(BaseModel):
+    response: str

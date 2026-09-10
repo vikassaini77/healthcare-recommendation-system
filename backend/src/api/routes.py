@@ -11,8 +11,8 @@ import json
 from src.ml_inference.model_xray import load_model
 from src.ml_inference.gradcam import GradCAM, create_heatmap
 from src.ml_inference.model import predict_disease, get_all_symptoms
-from src.domain.schemas import PredictionRequest, PredictionResponse, SymptomsResponse, XRayPredictionResponse, HolisticPredictionResponse
-from src.services.llm_service import generate_holistic_summary
+from src.domain.schemas import PredictionRequest, PredictionResponse, SymptomsResponse, XRayPredictionResponse, HolisticPredictionResponse, ChatRequest, ChatResponse
+from src.services.llm_service import generate_holistic_summary, generate_chat_response
 
 router = APIRouter()
 
@@ -113,3 +113,7 @@ async def predict_holistic(
         holistic_summary=holistic_summary
     )
 
+@router.post("/chat", response_model=ChatResponse)
+async def chat_endpoint(request: ChatRequest):
+    response_text = generate_chat_response(request.messages)
+    return ChatResponse(response=response_text)
