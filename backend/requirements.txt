@@ -24,3 +24,4 @@ opencv-python
 pillow
 matplotlib
 google-generativeai
+gradio
