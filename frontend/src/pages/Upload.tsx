@@ -140,6 +140,9 @@ const Upload = () => {
     try {
       const response = await fetch("/api/predict_xray", {
         method: "POST",
+        headers: {
+          "bypass-tunnel-reminder": "true"
+        },
         body: formData,
       });
       const data = await response.json();
@@ -506,4 +509,5 @@ const Upload = () => {
 };
 
 export default Upload;
+
 

@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://midwest-tested-employer-stories.trycloudflare.com/api/$1"
+      "destination": "https://medvision-api-77.loca.lt/api/$1"
     },
     {
       "source": "/(.*)",

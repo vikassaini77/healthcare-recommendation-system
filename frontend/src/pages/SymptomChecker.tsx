@@ -55,6 +55,9 @@ const Dashboard = () => {
     try {
       const response = await fetch("/api/predict_symptoms", {
         method: "POST",
+        headers: {
+          "bypass-tunnel-reminder": "true"
+        },
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           symptoms: selectedSymptoms,
@@ -274,4 +277,5 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
 

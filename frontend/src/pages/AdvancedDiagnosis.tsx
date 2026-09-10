@@ -101,6 +101,9 @@ const AdvancedDiagnosis = () => {
     try {
       const response = await fetch("/api/predict_holistic", {
         method: "POST",
+        headers: {
+          "bypass-tunnel-reminder": "true"
+        },
         body: formData,
       });
       const data = await response.json();
@@ -301,4 +304,5 @@ const AdvancedDiagnosis = () => {
 };
 
 export default AdvancedDiagnosis;
+
 
