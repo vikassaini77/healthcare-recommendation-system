@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import AnimatedMedicalBackground from '../../components/auth/AnimatedMedicalBackground';
-import AuthCard from '../../components/auth/AuthCard';
-import PasswordInput from '../../components/auth/PasswordInput';
-import PasswordStrengthIndicator, { isPasswordValid } from '../../components/auth/PasswordStrengthIndicator';
-import { Button } from '../../components/ui/button';
-import { Label } from '../../components/ui/label';
+import AnimatedMedicalBackground from '@/components/auth/AnimatedMedicalBackground';
+import AuthCard from '@/components/auth/AuthCard';
+import PasswordInput from '@/components/auth/PasswordInput';
+import PasswordStrengthIndicator, { isPasswordValid } from '@/components/auth/PasswordStrengthIndicator';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import { Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { cn } from '@/lib/utils';
 
 const ResetPassword = () => {
   const navigate = useNavigate();

@@ -2,12 +2,12 @@ import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
-import AnimatedMedicalBackground from '../../components/auth/AnimatedMedicalBackground';
-import AuthCard from '../../components/auth/AuthCard';
+import AnimatedMedicalBackground from '@/components/auth/AnimatedMedicalBackground';
+import AuthCard from '@/components/auth/AuthCard';
 
-import { Input } from '../../components/ui/input';
-import { Button } from '../../components/ui/button';
-import { Label } from '../../components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 
 import {
   Loader2,
