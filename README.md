@@ -19,6 +19,10 @@
 
 ---
 
+> ⚠️ **MEDICAL DISCLAIMER**: MedVision AI is provided for **educational and research purposes ONLY**. It is **NOT** a medical device. It must **not** be used in clinical, hospital, or diagnostic settings. The AI outputs do not constitute professional medical advice, diagnosis, or treatment. [Read the full disclaimer here](DISCLAIMER.md).
+
+---
+
 ## 📑 Table of Contents
 1. [Problem Statement](#problem-statement)
 2. [Solution Overview](#solution-overview)
