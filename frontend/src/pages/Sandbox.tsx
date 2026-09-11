@@ -140,7 +140,7 @@ const Sandbox = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-foreground dark selection:bg-primary/30 relative overflow-hidden">
+    <div className="min-h-screen bg-background text-foreground selection:bg-primary/30 relative overflow-hidden">
       {/* Background Orbs */}
       <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-primary/20 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-blue-500/10 blur-[120px] pointer-events-none" />
@@ -205,7 +205,7 @@ const Sandbox = () => {
                   className={`flex items-center gap-4 p-4 rounded-xl border text-left transition-all duration-300 backdrop-blur-sm ${
                     selectedScan?.id === scan.id 
                       ? 'border-primary/60 bg-primary/10 shadow-[0_0_30px_rgba(6,182,212,0.15)] ring-1 ring-primary/30' 
-                      : 'border-white/5 bg-white/5 hover:border-primary/40 hover:bg-white/10'
+                      : 'border-border/50 bg-card hover:border-primary/40 hover:bg-accent'
                   }`}
 
                 >
@@ -233,7 +233,7 @@ const Sandbox = () => {
             </div>
 
             <Card 
-              className="medical-card border-dashed border-white/10 p-8 text-center bg-white/5 hover:bg-white/10 transition-colors cursor-pointer group backdrop-blur-sm"
+              className="medical-card border-dashed border-border p-8 text-center bg-card hover:bg-accent transition-colors cursor-pointer group backdrop-blur-sm"
               onClick={() => fileInputRef.current?.click()}
             >
               <input 
@@ -243,7 +243,7 @@ const Sandbox = () => {
                 accept="image/*" 
                 className="hidden" 
               />
-              <div className="w-16 h-16 rounded-full bg-black/40 group-hover:bg-primary/20 transition-colors flex items-center justify-center mx-auto mb-4 border border-white/5 group-hover:border-primary/30 shadow-inner">
+              <div className="w-16 h-16 rounded-full bg-muted group-hover:bg-primary/20 transition-colors flex items-center justify-center mx-auto mb-4 border border-border/50 group-hover:border-primary/30 shadow-inner">
                 <UploadIcon className="w-8 h-8 text-muted-foreground group-hover:text-primary transition-colors" />
               </div>
               <h3 className="font-medium text-foreground mb-1">Upload your own scan</h3>
@@ -269,16 +269,16 @@ const Sandbox = () => {
               )}
             </div>
 
-            <Card className="medical-card overflow-hidden min-h-[400px] flex flex-col relative border-white/10 bg-white/5 backdrop-blur-md shadow-2xl">
+            <Card className="medical-card overflow-hidden min-h-[400px] flex flex-col relative border-border bg-card backdrop-blur-md shadow-2xl">
               {!selectedScan ? (
-                <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground p-8 text-center border-2 border-dashed border-white/5 m-4 rounded-xl bg-black/20">
+                <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground p-8 text-center border-2 border-dashed border-border/50 m-4 rounded-xl bg-muted/50">
                   <Activity className="w-16 h-16 mb-4 text-primary/40 animate-pulse" />
                   <p className="text-lg">Select a scan from the left to preview it here.</p>
                 </div>
               ) : (
                 <div className="flex-1 flex flex-col">
                   {/* Image Preview / Result */}
-                  <div className="relative w-full h-64 bg-black/40 flex items-center justify-center overflow-hidden border-b border-border/50">
+                  <div className="relative w-full h-64 bg-muted flex items-center justify-center overflow-hidden border-b border-border/50">
                     <img 
                       src={showResult ? selectedScan.mockResult.heatmapUrl : selectedScan.image} 
                       alt="Scan Preview" 

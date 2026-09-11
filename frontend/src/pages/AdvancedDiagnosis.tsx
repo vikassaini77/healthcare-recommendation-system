@@ -279,7 +279,7 @@ const AdvancedDiagnosis = () => {
                 </div>
                 
                 <Button 
-                  className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white" 
+                  className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-foreground" 
                   size="lg"
                   onClick={() => navigate('/reports/latest')}
                 >

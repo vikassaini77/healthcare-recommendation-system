@@ -33,10 +33,10 @@ function App() {
       <AuthProvider>
         <MedicalDataProvider>
           <NotificationProvider>
-            <ThemeProvider defaultTheme="dark" storageKey="medvision-theme">
+            <ThemeProvider defaultTheme="light" storageKey="medvision-theme">
               <BackgroundAnimation />
               <div className="min-h-screen bg-transparent text-foreground flex flex-col">
-              <Toaster position="bottom-right" theme="dark" />
+              <Toaster position="bottom-right" />
               <Routes>
                 {/* Public Routes */}
                 <Route path="/auth/login" element={<Login />} />

@@ -124,7 +124,7 @@ const Settings = () => {
                   <div className="flex items-center gap-6">
                     <div className="w-20 h-20 rounded-full bg-primary/10 border-2 border-primary/20 flex items-center justify-center text-primary font-bold text-2xl relative group overflow-hidden shrink-0">
                       {user?.fullName?.substring(0, 2)?.toUpperCase() || 'MD'}
-                      <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-white">
+                      <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-foreground">
                         <Camera className="w-6 h-6" />
                       </div>
                     </div>

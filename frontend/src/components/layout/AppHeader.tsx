@@ -3,6 +3,8 @@ import { NotificationBell } from "@/components/ui/NotificationBell";
 import { LogOut, Settings as SettingsIcon, User, CreditCard, Bell } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useTheme } from "@/components/ThemeProvider";
+import { Sun, Moon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -64,7 +66,10 @@ const AppHeader = () => {
           <span className="text-xs text-muted-foreground font-medium">Operational</span>
         </div>
 
-        <NotificationBell />
+        <Button variant="ghost" size="icon" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="mr-2">
+            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </Button>
+          <NotificationBell />
 
         <div className="h-6 w-px bg-border mx-1 hidden sm:block" />
 
