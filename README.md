@@ -335,11 +335,11 @@ pytest tests/
 
 ## 19. Screenshots Section <a name="screenshots-section"></a>
 
-> *Screenshots coming soon...*
-> - Dashboard
-> - Analytics
-> - X-Ray Upload View
-> - Generated World-Class Report
+### MedVision AI Dashboard
+![Dashboard Mockup](docs/images/dashboard.jpg)
+
+### AI X-Ray Analysis & Heatmaps
+![X-Ray Analysis](docs/images/xray_analysis.jpg)
 
 ---
 
