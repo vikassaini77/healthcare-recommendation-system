@@ -1,5 +1,7 @@
 <div align="center">
 
+![MedVision AI Banner](banner.jpg)
+
 # 🏥 MedVision AI
 ### Personalized Healthcare & Medicine Recommendation System
 
