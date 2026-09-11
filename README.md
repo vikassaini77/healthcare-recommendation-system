@@ -1,6 +1,6 @@
 <div align="center">
 
-![MedVision AI Banner](banner.jpg)
+<img src="banner.jpg" width="100%" alt="MedVision AI Banner">
 
 # 🏥 MedVision AI
 ### Personalized Healthcare & Medicine Recommendation System
