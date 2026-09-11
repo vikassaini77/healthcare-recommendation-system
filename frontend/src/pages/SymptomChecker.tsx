@@ -56,9 +56,9 @@ const Dashboard = () => {
       const response = await fetch("/api/predict_symptoms", {
         method: "POST",
         headers: {
-          "bypass-tunnel-reminder": "true"
+          "bypass-tunnel-reminder": "true",
+          "Content-Type": "application/json"
         },
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           symptoms: selectedSymptoms,
           patient_profile: profile
