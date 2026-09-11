@@ -1,9 +1,11 @@
 import { useState, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Card } from "@/components/ui/card";
 import { 
-  ArrowLeft, 
+  ArrowLeft,
+  Play, 
   Upload as UploadIcon, 
   Activity, 
   Zap, 
@@ -163,13 +165,29 @@ const Sandbox = () => {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-8 md:py-12">
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 flex flex-col items-center">
           <h1 className="text-3xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-primary/80 to-blue-500">
             Experience the Future of Radiology
           </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-6">
             Select a sample scan below and watch our explainable AI generate clinical insights with Grad-CAM visualization in seconds.
           </p>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="border-primary/50 text-primary hover:bg-primary/10 rounded-full px-6 shadow-glow">
+                <Play className="w-4 h-4 mr-2" />
+                Watch Cinematic Video
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl p-0 overflow-hidden bg-black/90 border-primary/20">
+              <video 
+                src="/demo_video.mp4" 
+                controls 
+                autoPlay 
+                className="w-full h-auto aspect-video rounded-lg"
+              />
+            </DialogContent>
+          </Dialog>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">

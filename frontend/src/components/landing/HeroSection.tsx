@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Play } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+
 
 const HeroSection = () => {
   const scrollToFeatures = () => {
@@ -55,10 +57,22 @@ const HeroSection = () => {
                   <ArrowRight className="w-5 h-5" />
                 </Button>
               </Link>
-              <Button variant="hero-outline" onClick={scrollToFeatures} className="w-full sm:w-auto">
-                <Play className="w-5 h-5" />
-                Explore Features
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="hero-outline" className="w-full sm:w-auto">
+                    <Play className="w-5 h-5" />
+                    Watch Cinematic Demo
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-4xl p-0 overflow-hidden bg-black/90 border-primary/20">
+                  <video 
+                    src="/demo_video.mp4" 
+                    controls 
+                    autoPlay 
+                    className="w-full h-auto aspect-video rounded-lg"
+                  />
+                </DialogContent>
+              </Dialog>
             </div>
 
             {/* Stats */}
