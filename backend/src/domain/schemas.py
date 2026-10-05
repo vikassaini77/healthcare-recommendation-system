@@ -2,9 +2,11 @@ from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 
 class PatientProfile(BaseModel):
+    name: str = "Unknown"
     age: int
     gender: str
     weight: float
+    height: float
     conditions: List[str]
 
 class PredictionRequest(BaseModel):
