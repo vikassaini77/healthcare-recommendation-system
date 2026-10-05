@@ -21,11 +21,11 @@ import { useState } from "react";
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
   { icon: Users, label: "Patients", path: "/patients" },
-  { icon: Upload, label: "Upload Scan", path: "/upload" },
-  { icon: Eye, label: "Explainability", path: "/explainability" },
+// { icon: Upload, label: "Upload Scan", path: "/upload" },
+  // { icon: Eye, label: "Explainability", path: "/explainability" },
   { icon: Stethoscope, label: "Symptom Checker", path: "/symptom-checker" },
   { icon: Activity, label: "Advanced Diagnosis", path: "/advanced-diagnosis" },
-  { icon: History, label: "Scan History", path: "/history" },
+  // { icon: History, label: "Scan History", path: "/history" },
   { icon: FileText, label: "Reports", path: "/reports" },
   { icon: BarChart3, label: "Analytics", path: "/analytics" },
 ];
