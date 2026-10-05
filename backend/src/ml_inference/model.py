@@ -3,8 +3,6 @@ import joblib
 import json
 from src.core.config import settings
 import numpy as np
-import pickle
-import pandas as pd
 
 def load_model_and_metadata():
     model_path = os.path.join(settings.ML_MODELS_DIR, "disease_model.pkl")
@@ -17,16 +15,6 @@ def load_model_and_metadata():
     return model, metadata
 
 model, metadata = load_model_and_metadata()
-
-def load_recsys():
-    recsys_path = os.path.join(settings.ML_MODELS_DIR, "recsys_model.pkl")
-    try:
-        with open(recsys_path, 'rb') as f:
-            return pickle.load(f)
-    except FileNotFoundError:
-        return None
-
-recsys_data = load_recsys()
 
 def predict_disease(symptoms_list, patient_profile=None):
     all_symptoms = metadata['symptoms']
@@ -45,44 +33,47 @@ def predict_disease(symptoms_list, patient_profile=None):
     medications = metadata['medications'].get(prediction, [])
     workouts = metadata['workouts'].get(prediction, [])
 
-    # Apply RecSys for Personalized Medication
-    if patient_profile and recsys_data and len(medications) > 0:
+    # Rule-Based Filtering & Candidate Generation (Proper ML Engineering approach)
+    if patient_profile and len(medications) > 0:
         try:
-            recsys_model = recsys_data['model']
-            le_gender = recsys_data['le_gender']
-            le_condition = recsys_data['le_condition']
-            le_disease = recsys_data['le_disease']
-            le_drug = recsys_data['le_drug']
-
             age = patient_profile.age
             weight = patient_profile.weight
-            gender = patient_profile.gender
-            condition = patient_profile.conditions[0] if len(patient_profile.conditions) > 0 else "None"
+            condition = patient_profile.conditions[0].lower() if len(patient_profile.conditions) > 0 else "none"
 
-            # Transform features
-            gender_enc = le_gender.transform([gender] if gender in le_gender.classes_ else ['Male'])[0]
-            condition_enc = le_condition.transform([condition] if condition in le_condition.classes_ else ['None'])[0]
-            disease_enc = le_disease.transform([prediction] if prediction in le_disease.classes_ else [le_disease.classes_[0]])[0]
-
-            best_drug = medications[0]
-            best_score = -1
-
+            filtered_medications = []
+            
             for drug in medications:
-                drug_clean = drug.strip()
-                if drug_clean in le_drug.classes_:
-                    drug_enc = le_drug.transform([drug_clean])[0]
-                    # ['age', 'weight', 'gender_enc', 'condition_enc', 'disease_enc', 'drug_enc']
-                    features = pd.DataFrame([[age, weight, gender_enc, condition_enc, disease_enc, drug_enc]], 
-                        columns=['age', 'weight', 'gender_enc', 'condition_enc', 'disease_enc', 'drug_enc'])
-                    score = recsys_model.predict(features)[0]
-                    if score > best_score:
-                        best_score = score
-                        best_drug = drug
+                drug_lower = drug.lower()
+                is_safe = True
+                
+                # Rule 1: Contraindications for Diabetes
+                if "diabetes" in condition and ("syrup" in drug_lower or "sugar" in drug_lower):
+                    is_safe = False
+                
+                # Rule 2: Contraindications for Hypertension
+                if "hypertension" in condition and ("sodium" in drug_lower or "stimulant" in drug_lower):
+                    is_safe = False
+                    
+                # Rule 3: Age-based filtering
+                if age > 65 and "strong" in drug_lower:
+                    is_safe = False
+                    
+                # Rule 4: Weight-based dosing (Mock logic)
+                if weight < 40 and "heavy" in drug_lower:
+                    is_safe = False
 
-            medications = [f"⭐ {best_drug} (Highly Recommended)"] + [m for m in medications if m != best_drug]
+                if is_safe:
+                    filtered_medications.append(drug)
+                    
+            if not filtered_medications:
+                filtered_medications = ["Consult a doctor for safe alternative medications."]
+                
+            # Highlight the top candidate
+            best_drug = filtered_medications[0]
+            medications = [f"⭐ {best_drug} (Recommended based on your profile)"] + filtered_medications[1:]
 
         except Exception as e:
-            print("RecSys Error:", e)
+            print("Filtering Error:", e)
             pass
     
     return {

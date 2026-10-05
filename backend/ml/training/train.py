@@ -2,25 +2,26 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 import joblib
 import json
 import os
 
 # Paths
-DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
-MODEL_DIR = os.path.join(os.path.dirname(__file__), '..', 'backend', 'app', 'model')
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+DATA_RAW_DIR = os.path.join(BASE_DIR, 'data', 'raw')
+DATA_PROCESSED_DIR = os.path.join(BASE_DIR, 'data', 'processed')
+MODEL_DIR = os.path.join(BASE_DIR, 'models')
 
-# Ensure model dir exists
+# Ensure dirs exist
+os.makedirs(DATA_PROCESSED_DIR, exist_ok=True)
 os.makedirs(MODEL_DIR, exist_ok=True)
 
-def train_and_export():
+def train_and_evaluate():
     print("Loading datasets...")
-    df = pd.read_csv(os.path.join(DATA_DIR, 'dataset.csv'))
+    df = pd.read_csv(os.path.join(DATA_RAW_DIR, 'dataset.csv'))
     
     # Process symptoms
-    # The dataset has Disease and Symptom_1 to Symptom_17
-    # We need to flatten the symptoms to find all unique symptoms
     symptoms = set()
     for col in df.columns[1:]:
         for val in df[col].dropna():
@@ -47,38 +48,65 @@ def train_and_export():
     X = np.array(X_data)
     y = np.array(y_data)
 
-    print("Training model...")
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    
+    print("Splitting dataset into Train (70%), Validation (15%), Test (15%)...")
+    # First split: 70% train, 30% temp (for val and test)
+    X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, random_state=42)
+    # Second split: 15% val, 15% test
+    X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
+
+    print("Training Random Forest model on training set...")
     model = RandomForestClassifier(n_estimators=100, random_state=42)
     model.fit(X_train, y_train)
     
-    y_pred = model.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred)
-    print(f"Model Accuracy: {accuracy * 100:.2f}%")
+    # Evaluate on Validation
+    print("Evaluating on Validation Set...")
+    y_val_pred = model.predict(X_val)
+    val_accuracy = accuracy_score(y_val, y_val_pred)
+    print(f"Validation Accuracy: {val_accuracy * 100:.2f}%")
+
+    # Evaluate on Test Set
+    print("Evaluating on Test Set...")
+    y_test_pred = model.predict(X_test)
+    test_accuracy = accuracy_score(y_test, y_test_pred)
+    
+    report = classification_report(y_test, y_test_pred)
+    conf_matrix = confusion_matrix(y_test, y_test_pred)
+
+    print(f"Test Accuracy: {test_accuracy * 100:.2f}%")
+    
+    # Save evaluation metrics
+    report_path = os.path.join(MODEL_DIR, 'evaluation_report.txt')
+    with open(report_path, 'w') as f:
+        f.write("=== Disease Prediction Model Evaluation ===\n")
+        f.write(f"Test Accuracy: {test_accuracy * 100:.2f}%\n\n")
+        f.write("--- Classification Report ---\n")
+        f.write(report)
+        f.write("\n\n--- Confusion Matrix ---\n")
+        f.write(np.array2string(conf_matrix))
+        
+    print(f"Evaluation report saved to {report_path}")
 
     # Save model
     joblib.dump(model, os.path.join(MODEL_DIR, 'disease_model.pkl'))
     
-    # Process Descriptions
-    desc_df = pd.read_csv(os.path.join(DATA_DIR, 'symptom_Description.csv'))
+    # Read other metadata logic (kept intact but updating paths)
+    desc_df = pd.read_csv(os.path.join(DATA_RAW_DIR, 'symptom_Description.csv'))
     descriptions = {row['Disease'].strip(): row['Description'].strip() for _, row in desc_df.iterrows()}
 
-    # Process Precautions
-    prec_df = pd.read_csv(os.path.join(DATA_DIR, 'symptom_precaution.csv'))
+    prec_df = pd.read_csv(os.path.join(DATA_RAW_DIR, 'symptom_precaution.csv'))
     precautions = {}
     for _, row in prec_df.iterrows():
         disease = str(row['Disease']).strip()
         precs = [str(p).strip() for p in row[1:] if pd.notna(p) and str(p).strip() != ""]
         precautions[disease] = precs
 
-    # Generate synthetic Diet and Medicine mappings (since Kaggle doesn't have it)
+    # Generate candidate medications/diets
     diets = {}
     medications = {}
     workouts = {}
     for disease in set(y):
         diets[disease] = ["Drink plenty of water", "Eat a balanced diet rich in vitamins", "Avoid junk food"]
-        medications[disease] = ["Consult a doctor for specific medications", "Paracetamol (if fever is present)"]
+        medications[disease] = ["Consult a doctor for specific medications", "Rest and hydration"]
         workouts[disease] = ["Light stretching", "Yoga", "Avoid heavy weightlifting"]
 
     metadata = {
@@ -90,10 +118,11 @@ def train_and_export():
         "workouts": workouts
     }
 
-    with open(os.path.join(MODEL_DIR, 'metadata.json'), 'w') as f:
+    # IMPORTANT: Save to the correct processed directory
+    with open(os.path.join(DATA_PROCESSED_DIR, 'metadata.json'), 'w') as f:
         json.dump(metadata, f, indent=4)
 
-    print("Training complete. Model and metadata exported to backend/app/model/")
+    print("Training complete. Model and metadata exported.")
 
 if __name__ == "__main__":
-    train_and_export()
+    train_and_evaluate()

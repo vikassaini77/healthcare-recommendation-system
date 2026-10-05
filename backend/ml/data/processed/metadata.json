@@ -422,27 +422,7 @@
         ]
     },
     "diets": {
-        "Hypertension": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "Diabetes": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "Jaundice": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "Hypoglycemia": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "Psoriasis": [
+        "Acne": [
             "Drink plenty of water",
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
@@ -452,47 +432,12 @@
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
         ],
-        "Common Cold": [
+        "Osteoarthristis": [
             "Drink plenty of water",
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
         ],
-        "Paralysis (brain hemorrhage)": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "Hepatitis E": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "hepatitis A": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "AIDS": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "Alcoholic hepatitis": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "Dimorphic hemmorhoids(piles)": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "Heart attack": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "Drug Reaction": [
+        "Diabetes": [
             "Drink plenty of water",
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
@@ -502,17 +447,17 @@
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
         ],
-        "Hypothyroidism": [
+        "Chronic cholestasis": [
             "Drink plenty of water",
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
         ],
-        "Bronchial Asthma": [
+        "Paralysis (brain hemorrhage)": [
             "Drink plenty of water",
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
         ],
-        "Impetigo": [
+        "hepatitis A": [
             "Drink plenty of water",
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
@@ -522,52 +467,12 @@
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
         ],
-        "Hepatitis C": [
+        "(vertigo) Paroymsal  Positional Vertigo": [
             "Drink plenty of water",
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
         ],
-        "Hyperthyroidism": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "Peptic ulcer diseae": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "Migraine": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "Urinary tract infection": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "Chronic cholestasis": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "Osteoarthristis": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "Allergy": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "Dengue": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "Fungal infection": [
+        "AIDS": [
             "Drink plenty of water",
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
@@ -577,22 +482,27 @@
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
         ],
+        "Dimorphic hemmorhoids(piles)": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Bronchial Asthma": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Allergy": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
         "Cervical spondylosis": [
             "Drink plenty of water",
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
         ],
-        "Malaria": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "(vertigo) Paroymsal  Positional Vertigo": [
-            "Drink plenty of water",
-            "Eat a balanced diet rich in vitamins",
-            "Avoid junk food"
-        ],
-        "Hepatitis D": [
+        "Heart attack": [
             "Drink plenty of water",
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
@@ -602,7 +512,17 @@
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
         ],
-        "Acne": [
+        "Psoriasis": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Jaundice": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Migraine": [
             "Drink plenty of water",
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
@@ -612,7 +532,77 @@
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
         ],
-        "Hepatitis B": [
+        "Hepatitis C": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Common Cold": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Peptic ulcer diseae": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Hyperthyroidism": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Malaria": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Dengue": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Hypertension": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Drug Reaction": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Alcoholic hepatitis": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Hypoglycemia": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Hepatitis E": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Hypothyroidism": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Arthritis": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Impetigo": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Fungal infection": [
             "Drink plenty of water",
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
@@ -622,161 +612,190 @@
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
         ],
-        "Arthritis": [
+        "Hepatitis B": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Urinary tract infection": [
+            "Drink plenty of water",
+            "Eat a balanced diet rich in vitamins",
+            "Avoid junk food"
+        ],
+        "Hepatitis D": [
             "Drink plenty of water",
             "Eat a balanced diet rich in vitamins",
             "Avoid junk food"
         ]
     },
     "medications": {
-        "Hypertension": [
-            "Consult a doctor for specific medications"
-        ],
-        "Diabetes": [
-            "Consult a doctor for specific medications"
-        ],
-        "Jaundice": [
-            "Consult a doctor for specific medications"
-        ],
-        "Hypoglycemia": [
-            "Consult a doctor for specific medications"
-        ],
-        "Psoriasis": [
-            "Consult a doctor for specific medications"
+        "Acne": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
         ],
         "Chicken pox": [
-            "Consult a doctor for specific medications"
-        ],
-        "Common Cold": [
-            "Consult a doctor for specific medications"
-        ],
-        "Paralysis (brain hemorrhage)": [
-            "Consult a doctor for specific medications"
-        ],
-        "Hepatitis E": [
-            "Consult a doctor for specific medications"
-        ],
-        "hepatitis A": [
-            "Consult a doctor for specific medications"
-        ],
-        "AIDS": [
-            "Consult a doctor for specific medications"
-        ],
-        "Alcoholic hepatitis": [
-            "Consult a doctor for specific medications"
-        ],
-        "Dimorphic hemmorhoids(piles)": [
-            "Consult a doctor for specific medications"
-        ],
-        "Heart attack": [
-            "Consult a doctor for specific medications"
-        ],
-        "Drug Reaction": [
-            "Consult a doctor for specific medications"
-        ],
-        "Varicose veins": [
-            "Consult a doctor for specific medications"
-        ],
-        "Hypothyroidism": [
-            "Consult a doctor for specific medications"
-        ],
-        "Bronchial Asthma": [
-            "Consult a doctor for specific medications"
-        ],
-        "Impetigo": [
-            "Consult a doctor for specific medications"
-        ],
-        "Typhoid": [
-            "Consult a doctor for specific medications"
-        ],
-        "Hepatitis C": [
-            "Consult a doctor for specific medications"
-        ],
-        "Hyperthyroidism": [
-            "Consult a doctor for specific medications"
-        ],
-        "Peptic ulcer diseae": [
-            "Consult a doctor for specific medications"
-        ],
-        "Migraine": [
-            "Consult a doctor for specific medications"
-        ],
-        "Urinary tract infection": [
-            "Consult a doctor for specific medications"
-        ],
-        "Chronic cholestasis": [
-            "Consult a doctor for specific medications"
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
         ],
         "Osteoarthristis": [
-            "Consult a doctor for specific medications"
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
         ],
-        "Allergy": [
-            "Consult a doctor for specific medications"
+        "Diabetes": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
         ],
-        "Dengue": [
-            "Consult a doctor for specific medications"
+        "Varicose veins": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
         ],
-        "Fungal infection": [
-            "Consult a doctor for specific medications"
+        "Chronic cholestasis": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
         ],
-        "Gastroenteritis": [
-            "Consult a doctor for specific medications"
+        "Paralysis (brain hemorrhage)": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
         ],
-        "Cervical spondylosis": [
-            "Consult a doctor for specific medications"
+        "hepatitis A": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
         ],
-        "Malaria": [
-            "Consult a doctor for specific medications"
+        "Typhoid": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
         ],
         "(vertigo) Paroymsal  Positional Vertigo": [
-            "Consult a doctor for specific medications"
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
         ],
-        "Hepatitis D": [
-            "Consult a doctor for specific medications"
+        "AIDS": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Gastroenteritis": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Dimorphic hemmorhoids(piles)": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Bronchial Asthma": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Allergy": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Cervical spondylosis": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Heart attack": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
         ],
         "Tuberculosis": [
-            "Consult a doctor for specific medications"
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
         ],
-        "Acne": [
-            "Benzoyl Peroxide",
-            "Salicylic Acid",
-            "Consult a Dermatologist"
+        "Psoriasis": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Jaundice": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Migraine": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
         ],
         "Pneumonia": [
-            "Consult a doctor for specific medications"
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
         ],
-        "Hepatitis B": [
-            "Consult a doctor for specific medications"
+        "Hepatitis C": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
         ],
-        "GERD": [
-            "Consult a doctor for specific medications"
+        "Common Cold": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Peptic ulcer diseae": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Hyperthyroidism": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Malaria": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Dengue": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Hypertension": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Drug Reaction": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Alcoholic hepatitis": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Hypoglycemia": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Hepatitis E": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Hypothyroidism": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
         ],
         "Arthritis": [
-            "Consult a doctor for specific medications"
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Impetigo": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Fungal infection": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "GERD": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Hepatitis B": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Urinary tract infection": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
+        ],
+        "Hepatitis D": [
+            "Consult a doctor for specific medications",
+            "Rest and hydration"
         ]
     },
     "workouts": {
-        "Hypertension": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "Diabetes": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "Jaundice": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "Hypoglycemia": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "Psoriasis": [
+        "Acne": [
             "Light stretching",
             "Yoga",
             "Avoid heavy weightlifting"
@@ -786,47 +805,12 @@
             "Yoga",
             "Avoid heavy weightlifting"
         ],
-        "Common Cold": [
+        "Osteoarthristis": [
             "Light stretching",
             "Yoga",
             "Avoid heavy weightlifting"
         ],
-        "Paralysis (brain hemorrhage)": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "Hepatitis E": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "hepatitis A": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "AIDS": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "Alcoholic hepatitis": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "Dimorphic hemmorhoids(piles)": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "Heart attack": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "Drug Reaction": [
+        "Diabetes": [
             "Light stretching",
             "Yoga",
             "Avoid heavy weightlifting"
@@ -836,17 +820,17 @@
             "Yoga",
             "Avoid heavy weightlifting"
         ],
-        "Hypothyroidism": [
+        "Chronic cholestasis": [
             "Light stretching",
             "Yoga",
             "Avoid heavy weightlifting"
         ],
-        "Bronchial Asthma": [
+        "Paralysis (brain hemorrhage)": [
             "Light stretching",
             "Yoga",
             "Avoid heavy weightlifting"
         ],
-        "Impetigo": [
+        "hepatitis A": [
             "Light stretching",
             "Yoga",
             "Avoid heavy weightlifting"
@@ -856,52 +840,12 @@
             "Yoga",
             "Avoid heavy weightlifting"
         ],
-        "Hepatitis C": [
+        "(vertigo) Paroymsal  Positional Vertigo": [
             "Light stretching",
             "Yoga",
             "Avoid heavy weightlifting"
         ],
-        "Hyperthyroidism": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "Peptic ulcer diseae": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "Migraine": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "Urinary tract infection": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "Chronic cholestasis": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "Osteoarthristis": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "Allergy": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "Dengue": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "Fungal infection": [
+        "AIDS": [
             "Light stretching",
             "Yoga",
             "Avoid heavy weightlifting"
@@ -911,22 +855,27 @@
             "Yoga",
             "Avoid heavy weightlifting"
         ],
+        "Dimorphic hemmorhoids(piles)": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Bronchial Asthma": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Allergy": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
         "Cervical spondylosis": [
             "Light stretching",
             "Yoga",
             "Avoid heavy weightlifting"
         ],
-        "Malaria": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "(vertigo) Paroymsal  Positional Vertigo": [
-            "Light stretching",
-            "Yoga",
-            "Avoid heavy weightlifting"
-        ],
-        "Hepatitis D": [
+        "Heart attack": [
             "Light stretching",
             "Yoga",
             "Avoid heavy weightlifting"
@@ -936,7 +885,17 @@
             "Yoga",
             "Avoid heavy weightlifting"
         ],
-        "Acne": [
+        "Psoriasis": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Jaundice": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Migraine": [
             "Light stretching",
             "Yoga",
             "Avoid heavy weightlifting"
@@ -946,7 +905,77 @@
             "Yoga",
             "Avoid heavy weightlifting"
         ],
-        "Hepatitis B": [
+        "Hepatitis C": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Common Cold": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Peptic ulcer diseae": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Hyperthyroidism": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Malaria": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Dengue": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Hypertension": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Drug Reaction": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Alcoholic hepatitis": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Hypoglycemia": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Hepatitis E": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Hypothyroidism": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Arthritis": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Impetigo": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Fungal infection": [
             "Light stretching",
             "Yoga",
             "Avoid heavy weightlifting"
@@ -956,7 +985,17 @@
             "Yoga",
             "Avoid heavy weightlifting"
         ],
-        "Arthritis": [
+        "Hepatitis B": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Urinary tract infection": [
+            "Light stretching",
+            "Yoga",
+            "Avoid heavy weightlifting"
+        ],
+        "Hepatitis D": [
             "Light stretching",
             "Yoga",
             "Avoid heavy weightlifting"
