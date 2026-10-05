@@ -53,7 +53,7 @@ const AdvancedDiagnosis = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("/api/symptoms")
+    fetch(`${import.meta.env.VITE_API_URL || ""}/api/symptoms`)
       .then((res) => res.json())
       .then((data) => setSymptoms(data.symptoms))
       .catch((err) => console.error("Error fetching symptoms:", err));
@@ -99,7 +99,7 @@ const AdvancedDiagnosis = () => {
     }));
 
     try {
-      const response = await fetch("/api/predict_holistic", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || ""}/api/predict_holistic`, {
         method: "POST",
         headers: {
           "bypass-tunnel-reminder": "true"

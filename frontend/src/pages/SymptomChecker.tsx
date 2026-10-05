@@ -28,7 +28,8 @@ const Dashboard = () => {
   const [conditions, setConditions] = useState("");
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL || ""}/api/symptoms`)
+    const baseUrl = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+    fetch(`${baseUrl}/api/symptoms`)
       .then((res) => res.json())
       .then((data) => setSymptoms(data.symptoms))
       .catch((err) => console.error("Error fetching symptoms:", err));
@@ -56,7 +57,8 @@ const Dashboard = () => {
     };
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || ""}/api/predict_symptoms`, {
+      const baseUrl = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+      const response = await fetch(`${baseUrl}/api/predict_symptoms`, {
         method: "POST",
         headers: {
           "bypass-tunnel-reminder": "true",

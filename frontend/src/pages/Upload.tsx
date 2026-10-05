@@ -138,7 +138,7 @@ const Upload = () => {
     formData.append("file", file);
 
     try {
-      const response = await fetch("/api/predict_xray", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || ""}/api/predict_xray`, {
         method: "POST",
         headers: {
           "bypass-tunnel-reminder": "true"
