@@ -223,6 +223,17 @@ const Signup = () => {
                 />
               </div>
 
+              <div className="flex items-center space-x-2 pt-2">
+                <Checkbox 
+                  id="terms" 
+                  checked={acceptTerms}
+                  onCheckedChange={(checked) => setAcceptTerms(checked as boolean)}
+                />
+                <Label htmlFor="terms" className="text-sm text-muted-foreground font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  I accept the <a href="#" className="text-primary hover:underline">Terms of Service</a> and <a href="#" className="text-primary hover:underline">Privacy Policy</a>
+                </Label>
+              </div>
+
               <Button
                 type="submit"
                 disabled={isLoading}
