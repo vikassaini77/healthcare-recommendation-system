@@ -7,6 +7,7 @@ import io
 import uuid
 import cv2
 import json
+import os
 from src.ml_inference.model import predict_disease, get_all_symptoms
 from src.domain.schemas import PredictionRequest, PredictionResponse, SymptomsResponse, XRayPredictionResponse, HolisticPredictionResponse, ChatRequest, ChatResponse
 from src.services.llm_service import generate_holistic_summary, generate_chat_response
