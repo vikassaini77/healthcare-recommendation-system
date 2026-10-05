@@ -21,6 +21,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
 
   // Patient Profile States
+  const [name, setName] = useState("");
   const [age, setAge] = useState<number | "">("");
   const [gender, setGender] = useState("Male");
   const [weight, setWeight] = useState<number | "">("");
@@ -42,15 +43,16 @@ const Dashboard = () => {
   };
 
   const handlePredict = async () => {
-    if (selectedSymptoms.length === 0) return;
+    if (selectedSymptoms.length === 0 || !name || age === "" || weight === "" || !conditions) return;
     setLoading(true);
     
-    const profile = (age && weight) ? {
+    const profile = {
+      name: name,
       age: Number(age),
       gender: gender,
       weight: Number(weight),
       conditions: conditions.split(",").map(c => c.trim()).filter(c => c.length > 0)
-    } : null;
+    };
 
     try {
       const response = await fetch("/api/predict_symptoms", {
@@ -91,22 +93,35 @@ const Dashboard = () => {
             <Card className="p-6 bg-card border-border">
               <h2 className="text-xl font-semibold mb-4">1. Patient Profile</h2>
               <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="col-span-2">
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Full Name *</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. John Doe"
+                    className="w-full p-2 bg-background border border-border rounded-md text-sm"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </div>
                 <div>
-                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Age</label>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Age *</label>
                   <input
                     type="number"
                     placeholder="e.g. 35"
                     className="w-full p-2 bg-background border border-border rounded-md text-sm"
                     value={age}
                     onChange={(e) => setAge(e.target.value ? Number(e.target.value) : "")}
+                    required
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Gender</label>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Gender *</label>
                   <select 
                     className="w-full p-2 bg-background border border-border rounded-md text-sm"
                     value={gender}
                     onChange={(e) => setGender(e.target.value)}
+                    required
                   >
                     <option>Male</option>
                     <option>Female</option>
@@ -114,23 +129,25 @@ const Dashboard = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Weight (kg)</label>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Weight (kg) *</label>
                   <input
                     type="number"
                     placeholder="e.g. 70"
                     className="w-full p-2 bg-background border border-border rounded-md text-sm"
                     value={weight}
                     onChange={(e) => setWeight(e.target.value ? Number(e.target.value) : "")}
+                    required
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Conditions</label>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Conditions *</label>
                   <input
                     type="text"
-                    placeholder="e.g. Diabetes"
+                    placeholder="e.g. Diabetes, or 'None'"
                     className="w-full p-2 bg-background border border-border rounded-md text-sm"
                     value={conditions}
                     onChange={(e) => setConditions(e.target.value)}
+                    required
                   />
                 </div>
               </div>
@@ -180,7 +197,7 @@ const Dashboard = () => {
               <Button 
                 className="w-full mt-6" 
                 onClick={handlePredict} 
-                disabled={loading || selectedSymptoms.length === 0}
+                disabled={loading || selectedSymptoms.length === 0 || !name || age === "" || weight === "" || !conditions}
               >
                 {loading ? "Analyzing..." : "Get Recommendation"}
               </Button>
