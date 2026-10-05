@@ -35,18 +35,17 @@ const HeroSection = () => {
             <div className="space-y-4">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium animate-fade-in">
                 <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                AI-Powered Medical Imaging
+                Data Science & ML Powered
               </div>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight animate-fade-in-up opacity-0" style={{ animationDelay: "0.1s", animationFillMode: "forwards" }}>
-                <span className="text-foreground">Explainable AI for</span>
+                <span className="text-foreground">Personalized Healthcare &</span>
                 <br />
-                <span className="bg-gradient-medical bg-clip-text text-transparent">Medical Imaging</span>
+                <span className="bg-gradient-medical bg-clip-text text-transparent">Medicine Recommendation System</span>
               </h1>
               
               <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0 animate-fade-in-up opacity-0" style={{ animationDelay: "0.2s", animationFillMode: "forwards" }}>
-                Radiology-grade AI screening with transparency and clinical insight. 
-                Powered by Grad-CAM explainability for trustworthy diagnostics.
+                Predict diseases from symptoms and generate personalized medicine recommendations using advanced Machine Learning filtering techniques.
               </p>
             </div>
 
@@ -79,8 +78,8 @@ const HeroSection = () => {
             <div className="grid grid-cols-3 gap-6 pt-8 animate-fade-in-up opacity-0" style={{ animationDelay: "0.4s", animationFillMode: "forwards" }}>
               {[
                 { value: "99.2%", label: "Accuracy" },
-                { value: "< 2s", label: "Analysis Time" },
-                { value: "100%", label: "Explainable" },
+                { value: "< 2s", label: "Inference Time" },
+                { value: "100%", label: "Personalized" },
               ].map((stat) => (
                 <div key={stat.label} className="text-center lg:text-left">
                   <div className="text-2xl md:text-3xl font-bold text-primary">{stat.value}</div>

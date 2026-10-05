@@ -12,11 +12,11 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, L
 import { format } from "date-fns";
 
 const CHART_DATA = [
-  { name: 'Normal', value: 43.5, color: '#10b981' },
-  { name: 'Pneumonia', value: 32.4, color: '#ef4444' },
-  { name: 'Tuberculosis', value: 15.6, color: '#f59e0b' },
-  { name: 'COVID-19', value: 4.7, color: '#3b82f6' },
-  { name: 'Other', value: 3.8, color: '#8b5cf6' },
+  { name: 'Diabetes', value: 35.5, color: '#10b981' },
+  { name: 'Hypertension', value: 25.4, color: '#ef4444' },
+  { name: 'Asthma', value: 15.6, color: '#f59e0b' },
+  { name: 'Allergy', value: 14.7, color: '#3b82f6' },
+  { name: 'Other', value: 8.8, color: '#8b5cf6' },
 ];
 
 const Dashboard = () => {
@@ -64,7 +64,7 @@ const Dashboard = () => {
                 <ImageIcon className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Images Analyzed</p>
+                <p className="text-sm font-medium text-muted-foreground">Cases Analyzed</p>
                 <h3 className="text-2xl font-bold">1,248</h3>
               </div>
             </div>
@@ -155,8 +155,8 @@ const Dashboard = () => {
                     <span className="font-medium">{primaryPatient?.gender || '--'}</span>
                   </div>
                   <div className="flex justify-between border-b border-border pb-2">
-                    <span className="text-muted-foreground">Modality</span>
-                    <span className="font-medium">{primaryScan.modality}</span>
+                    <span className="text-muted-foreground">Type</span>
+                    <span className="font-medium">Symptom Check</span>
                   </div>
                   <div className="flex justify-between pt-1">
                     <span className="text-muted-foreground">Date</span>
@@ -191,7 +191,7 @@ const Dashboard = () => {
               <div className="flex justify-between items-center mb-6 relative z-10">
                 <h3 className="font-semibold text-xl flex items-center gap-2">
                   <Activity className="w-5 h-5 text-primary" />
-                  AI Prediction & Explainability
+                  AI Disease Prediction
                 </h3>
                 {primaryScan && (
                   <div className={`px-4 py-1.5 rounded-full text-sm font-semibold flex items-center gap-2 border ${getRiskBg(primaryScan.risk)} ${getRiskColor(primaryScan.risk)} border-${primaryScan.risk === 'high' ? 'red' : 'emerald'}-500/30 shadow-sm backdrop-blur-sm`}>
@@ -209,61 +209,23 @@ const Dashboard = () => {
               </div>
 
               {primaryScan ? (
-                <div className="grid grid-cols-2 gap-6 flex-1 relative z-10">
-                  <div className="flex flex-col group">
-                    <div className="flex items-center justify-between mb-3">
-                      <p className="text-sm font-semibold text-foreground flex items-center gap-2">
-                        <ImageIcon className="w-4 h-4 text-muted-foreground" />
-                        Original X-Ray
-                      </p>
-                    </div>
-                    <div className="relative flex-1 rounded-xl overflow-hidden bg-black/40 border border-border/50 min-h-[300px] shadow-inner group-hover:border-primary/30 transition-colors">
-                      <img src={primaryScan.imageData} alt="Original" className="w-full h-full object-contain" />
-                      <div className="absolute top-3 left-3 bg-background/80 backdrop-blur-md text-foreground text-[10px] font-bold px-2 py-1 rounded shadow-sm border border-border/50">R</div>
-                    </div>
-                  </div>
-                  <div className="flex flex-col group">
-                    <div className="flex items-center justify-between mb-3">
-                      <p className="text-sm font-semibold text-primary flex items-center gap-2">
-                        <Zap className="w-4 h-4" />
-                        Grad-CAM Heatmap
-                      </p>
-                    </div>
-                    <div className="relative flex-1 rounded-xl overflow-hidden bg-black/40 border border-primary/30 min-h-[300px] shadow-[0_0_15px_rgba(var(--primary),0.1)] group-hover:shadow-[0_0_20px_rgba(var(--primary),0.2)] transition-all">
-                      <img src={primaryScan.imageData} alt="Base" className="absolute inset-0 w-full h-full object-contain opacity-70" />
-                      {primaryScan.gradcamData && (
-                        <img src={primaryScan.gradcamData} alt="Heatmap" className="absolute inset-0 w-full h-full object-contain mix-blend-screen opacity-100" />
-                      )}
-                      
-                      {/* Elegant Heatmap Legend */}
-                      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2 bg-background/60 backdrop-blur-md p-1.5 rounded-full border border-border/50 shadow-sm">
-                        <span className="text-[9px] font-bold text-foreground uppercase tracking-wider">High</span>
-                        <div className="w-1.5 h-24 rounded-full bg-gradient-to-b from-red-500 via-yellow-400 to-blue-500" />
-                        <span className="text-[9px] font-bold text-foreground uppercase tracking-wider">Low</span>
-                      </div>
-                    </div>
-                  </div>
+                <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground min-h-[300px] bg-secondary/20 rounded-xl border border-dashed border-border/60 m-2">
+                  <Activity className="w-12 h-12 mb-3 opacity-20" />
+                  <p className="text-lg font-medium text-foreground">{primaryScan.prediction}</p>
+                  <p>AI Recommendation Engine has processed this patient's symptoms.</p>
                 </div>
               ) : (
                 <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground min-h-[300px] bg-secondary/20 rounded-xl border border-dashed border-border/60 m-2">
-                  <ImageIcon className="w-12 h-12 mb-3 opacity-20" />
-                  <p>Upload a scan to view AI analysis.</p>
+                  <Activity className="w-12 h-12 mb-3 opacity-20" />
+                  <p>Submit a Symptom Check to view AI analysis.</p>
                 </div>
               )}
               
               <div className="mt-6 pt-5 border-t border-border/60 flex justify-between items-center relative z-10 bg-secondary/10 -mx-6 -mb-6 px-6 pb-6 rounded-b-xl">
                 <p className="text-sm text-muted-foreground flex items-center gap-2">
                   <Activity className="w-4 h-4 text-primary/70" />
-                  Highlighted regions indicate the areas that most influenced the AI's prediction.
+                  AI models use patient symptoms and profiles to predict diseases and generate personalized recommendations.
                 </p>
-                {primaryScan && (
-                  <Link to={`/explainability/${primaryScan.id}`}>
-                    <Button size="sm" className="shadow-sm group">
-                      Full Explainability Report
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </Link>
-                )}
               </div>
             </Card>
           </div>
