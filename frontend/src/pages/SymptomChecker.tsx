@@ -20,15 +20,15 @@ const Dashboard = () => {
   const [result, setResult] = useState<PredictionResult | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Patient Profile States
   const [name, setName] = useState("");
   const [age, setAge] = useState<number | "">("");
   const [gender, setGender] = useState("Male");
   const [weight, setWeight] = useState<number | "">("");
+  const [height, setHeight] = useState<number | "">("");
   const [conditions, setConditions] = useState("");
 
   useEffect(() => {
-    fetch("/api/symptoms")
+    fetch(`${import.meta.env.VITE_API_URL || ""}/api/symptoms`)
       .then((res) => res.json())
       .then((data) => setSymptoms(data.symptoms))
       .catch((err) => console.error("Error fetching symptoms:", err));
@@ -43,7 +43,7 @@ const Dashboard = () => {
   };
 
   const handlePredict = async () => {
-    if (selectedSymptoms.length === 0 || !name || age === "" || weight === "" || !conditions) return;
+    if (selectedSymptoms.length === 0 || !name || age === "" || weight === "" || height === "" || !conditions) return;
     setLoading(true);
     
     const profile = {
@@ -51,11 +51,12 @@ const Dashboard = () => {
       age: Number(age),
       gender: gender,
       weight: Number(weight),
+      height: Number(height),
       conditions: conditions.split(",").map(c => c.trim()).filter(c => c.length > 0)
     };
 
     try {
-      const response = await fetch("/api/predict_symptoms", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || ""}/api/predict_symptoms`, {
         method: "POST",
         headers: {
           "bypass-tunnel-reminder": "true",
@@ -140,6 +141,17 @@ const Dashboard = () => {
                   />
                 </div>
                 <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Height (cm) *</label>
+                  <input
+                    type="number"
+                    placeholder="e.g. 175"
+                    className="w-full p-2 bg-background border border-border rounded-md text-sm"
+                    value={height}
+                    onChange={(e) => setHeight(e.target.value ? Number(e.target.value) : "")}
+                    required
+                  />
+                </div>
+                <div className="col-span-2">
                   <label className="text-xs font-medium text-muted-foreground mb-1 block">Conditions *</label>
                   <input
                     type="text"
@@ -197,7 +209,7 @@ const Dashboard = () => {
               <Button 
                 className="w-full mt-6" 
                 onClick={handlePredict} 
-                disabled={loading || selectedSymptoms.length === 0 || !name || age === "" || weight === "" || !conditions}
+                disabled={loading || selectedSymptoms.length === 0 || !name || age === "" || weight === "" || height === "" || !conditions}
               >
                 {loading ? "Analyzing..." : "Get Recommendation"}
               </Button>
