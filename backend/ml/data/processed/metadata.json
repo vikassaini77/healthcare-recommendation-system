@@ -630,168 +630,129 @@
     },
     "medications": {
         "Hypertension": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Diabetes": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Jaundice": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Hypoglycemia": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Psoriasis": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Chicken pox": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Common Cold": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Paralysis (brain hemorrhage)": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Hepatitis E": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "hepatitis A": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "AIDS": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Alcoholic hepatitis": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Dimorphic hemmorhoids(piles)": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Heart attack": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Drug Reaction": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Varicose veins": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Hypothyroidism": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Bronchial Asthma": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Impetigo": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Typhoid": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Hepatitis C": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Hyperthyroidism": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Peptic ulcer diseae": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Migraine": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Urinary tract infection": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Chronic cholestasis": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Osteoarthristis": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Allergy": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Dengue": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Fungal infection": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Gastroenteritis": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Cervical spondylosis": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Malaria": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "(vertigo) Paroymsal  Positional Vertigo": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Hepatitis D": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Tuberculosis": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Acne": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Benzoyl Peroxide",
+            "Salicylic Acid",
+            "Consult a Dermatologist"
         ],
         "Pneumonia": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Hepatitis B": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "GERD": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ],
         "Arthritis": [
-            "Consult a doctor for specific medications",
-            "Paracetamol (if fever is present)"
+            "Consult a doctor for specific medications"
         ]
     },
     "workouts": {

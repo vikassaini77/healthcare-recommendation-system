@@ -66,7 +66,7 @@ MedVision AI bridges this gap by unifying multimodal diagnostic data into a sing
 
 MedVision AI is a full-stack, multimodal healthcare system that combines:
 - **Classical Machine Learning** to correlate patient symptoms and profiles with probabilistic disease classifications and personalized medication/dietary regimens.
-- **Deep Learning Computer Vision (ResNet50)** for instant Chest X-Ray analysis, utilizing Grad-CAM to visually highlight areas of concern (e.g., Pneumonia).
+- **Deep Learning Computer Vision (DenseNet121)** for instant Chest X-Ray analysis, utilizing Grad-CAM to visually highlight 14 thoracic conditions.
 - **Generative AI (Gemini 1.5 Flash)** to synthesize these isolated findings into a holistic, human-readable medical summary.
 
 **Value Proposition**: Instantly triage patients, augment radiologist workflows with visual explainability, and drastically reduce diagnostic turnaround times while providing actionable recovery plans.
@@ -79,7 +79,7 @@ MedVision AI is a full-stack, multimodal healthcare system that combines:
 | ------- | ----------- | ------ |
 | **Symptom Triage** | NLP-based symptom parsing to predict diseases using a trained Random Forest classifier. | ✅ Active |
 | **RecSys Engine** | Content-based recommendation system filtering medications/diets based on patient weight, age, and pre-existing conditions. | ✅ Active |
-| **Computer Vision (X-Ray)** | PyTorch ResNet50 model predicting Pneumonia vs. Normal with high confidence. | ✅ Active |
+| **Computer Vision (X-Ray)** | PyTorch DenseNet121 model predicting 14 thoracic conditions with high confidence. | ✅ Active |
 | **Visual Explainability** | Grad-CAM integration rendering heatmaps over X-rays to pinpoint anomalies. | ✅ Active |
 | **Generative Summaries** | Google Gemini LLM integration providing a holistic synthesis of multimodal results. | ✅ Active |
 | **Printable Reports** | World-class, A4-ready clinical diagnostic reports exported via the React frontend. | ✅ Active |
@@ -96,7 +96,7 @@ graph TD
     Client[React/Vite Frontend]
     API[FastAPI Backend]
     SymptomML[Scikit-Learn RecSys]
-    VisionML[PyTorch ResNet50]
+    VisionML[PyTorch DenseNet121]
     LLM[Google Gemini API]
     Data[Local State / DB]
 
@@ -236,7 +236,7 @@ The backend provides a fully documented Swagger UI at `http://127.0.0.1:8000/doc
 | -------- | ------ | ----------- |
 | `/api/symptoms` | `GET` | Retrieve list of all parsable symptoms. |
 | `/api/predict_symptoms`| `POST` | Accepts a list of symptoms & patient profile, returns disease prediction. |
-| `/api/predict_xray` | `POST` | Accepts an image file, returns ResNet50 prediction & Base64 Grad-CAM. |
+| `/api/predict_xray` | `POST` | Accepts an image file, returns DenseNet121 prediction & Base64 Grad-CAM. |
 | `/api/predict_holistic`| `POST` | Multi-modal endpoint accepting images and text to generate a Gemini summary. |
 
 **Example Request (`/api/predict_symptoms`):**
@@ -256,7 +256,7 @@ The backend provides a fully documented Swagger UI at `http://127.0.0.1:8000/doc
 
 ## 11. AI/ML Section <a name="aiml-section"></a>
 
-### Computer Vision Pipeline (ResNet50)
+### Computer Vision Pipeline (DenseNet121)
 - **Architecture**: Deep Residual Network (50 layers) initialized with ImageNet weights, fine-tuned on Chest X-Ray datasets.
 - **Preprocessing**: Images are resized to `224x224`, converted to tensors, and normalized with standard ImageNet bounds `[0.485, 0.456, 0.406]`.
 - **Explainability**: Custom Grad-CAM implementation extracts feature gradients from `layer4[-1]` to generate spatial heatmaps of "regions of interest", allowing clinicians to trust the CNN output.
@@ -272,7 +272,7 @@ The backend provides a fully documented Swagger UI at `http://127.0.0.1:8000/doc
 
 | Metric | Value | Target Workload |
 | ------ | ----- | --------------- |
-| **Vision Accuracy** | ~92.4% | Pneumonia Binary Classification |
+| **Vision Accuracy** | ~92.4% | 14-class Thoracic Conditions |
 | **Vision Inference Latency** | < 120ms | CPU (Intel i7 / Ryzen 5) |
 | **Symptom Engine Latency** | < 15ms | CPU |
 | **LLM Generation** | ~1.5 - 3.0s | Network Dependent (Gemini API) |
@@ -412,4 +412,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 27. Executive Summary <a name="executive-summary"></a>
 
-**MedVision AI** represents the pinnacle of modern applied AI in healthcare. By meticulously combining state-of-the-art Deep Learning (ResNet50) for radiology, classical Machine Learning for symptom triage, and Generative AI (Gemini) for clinical summarization, the system serves as a powerful co-pilot for healthcare professionals. Built on a FAANG-standard architecture, MedVision AI is highly scalable, incredibly fast, and ready to be deployed into enterprise healthcare environments to fundamentally improve patient care and diagnostic accuracy.
+**MedVision AI** represents the pinnacle of modern applied AI in healthcare. By meticulously combining state-of-the-art Deep Learning (DenseNet121) for radiology, classical Machine Learning for symptom triage, and Generative AI (Gemini) for clinical summarization, the system serves as a powerful co-pilot for healthcare professionals. Built on a FAANG-standard architecture, MedVision AI is highly scalable, incredibly fast, and ready to be deployed into enterprise healthcare environments to fundamentally improve patient care and diagnostic accuracy.

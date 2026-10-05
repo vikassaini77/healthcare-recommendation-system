@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Loader2, AlertCircle, CheckCircle2, Activity, Mail, Lock, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const roles: { value: UserRole; label: string }[] = [
@@ -86,167 +86,168 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-      <AnimatedMedicalBackground />
+    <div className="min-h-screen w-full flex relative bg-black selection:bg-primary/30 overflow-hidden">
+      {/* Full Screen Background Image */}
+      <img 
+        src="/signup-bg.jpg" 
+        alt="Medical AI Background" 
+        className="absolute inset-0 w-full h-full object-cover object-center opacity-40 mix-blend-screen animate-breathe-pan" 
+      />
       
-      <div className="relative z-10 w-full py-8">
-        <AuthCard
-          title="Create Account"
-          subtitle="Join MedVision AI platform"
-          className={cn(shake && "animate-shake")}
-        >
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Error message */}
-            {error && (
-              <div className="flex items-start gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm animate-fade-in">
-                <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <span>{error}</span>
+      {/* Cinematic Gradient Overlays */}
+      <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/60 to-transparent lg:to-background/20 z-0" />
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/50 z-0" />
+
+      {/* Left Content (Hidden on Mobile) */}
+      <div className="hidden lg:flex flex-col justify-center relative z-10 w-1/2 p-12 xl:p-24">
+        <div className="max-w-xl animate-fade-in-up">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-semibold mb-6 backdrop-blur-md animate-float" style={{ animationDuration: "4s" }}>
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-400"></span>
+            </span>
+            Join the Network
+          </div>
+          
+          <h1 className="text-5xl xl:text-6xl font-bold leading-tight text-white mb-6 tracking-tight drop-shadow-xl">
+            Accelerate <br/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300 drop-shadow-none">Clinical Research.</span>
+          </h1>
+          
+          <p className="text-lg xl:text-xl text-white/80 max-w-md font-light leading-relaxed drop-shadow-md">
+            Join thousands of global medical professionals and researchers analyzing complex genomic and radiological datasets in real-time.
+          </p>
+          
+          <div className="mt-12 flex gap-8">
+            <div className="animate-float" style={{ animationDelay: "0s" }}>
+              <div className="text-3xl font-bold text-white drop-shadow-md">15k+</div>
+              <div className="text-sm text-white/60 uppercase tracking-widest font-semibold mt-1">Specialists</div>
+            </div>
+            <div className="w-px h-12 bg-white/20" />
+            <div className="animate-float" style={{ animationDelay: "1s" }}>
+              <div className="text-3xl font-bold text-white drop-shadow-md">50M+</div>
+              <div className="text-sm text-white/60 uppercase tracking-widest font-semibold mt-1">Scans Analyzed</div>
+            </div>
+            <div className="w-px h-12 bg-white/20" />
+            <div className="animate-float" style={{ animationDelay: "2s" }}>
+              <div className="text-3xl font-bold text-white drop-shadow-md">24/7</div>
+              <div className="text-sm text-white/60 uppercase tracking-widest font-semibold mt-1">Support</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Right Content - Glassmorphic Form Container */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center relative z-10 p-6">
+        
+        <div className="w-full max-w-lg mx-auto relative z-10 animate-fade-in">
+          {/* Glass Card Container */}
+          <div className="p-8 lg:p-10 relative">
+            
+            <div className="mb-8 text-center flex flex-col items-center">
+              <div className="inline-flex items-center justify-center p-3.5 bg-gradient-to-br from-primary/20 to-blue-500/20 rounded-2xl mb-4 border border-primary/20 shadow-glow-sm relative group">
+                <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <Activity className="w-8 h-8 text-primary relative z-10" />
               </div>
-            )}
-
-            {/* Full Name */}
-            <div className="space-y-2">
-              <Label htmlFor="fullName">Full Name</Label>
-              <Input
-                id="fullName"
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="Dr. John Smith"
-                disabled={isLoading}
-                autoComplete="name"
-                className="bg-secondary border-border focus:ring-2 focus:ring-primary/20 focus:border-primary"
-              />
+              <h2 className="text-3xl font-bold tracking-tight mb-2 text-foreground">Create Account</h2>
+              <p className="text-muted-foreground font-medium">Join MedVision AI for advanced diagnostics</p>
             </div>
 
-            {/* Email */}
-            <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="doctor@hospital.org"
-                disabled={isLoading}
-                autoComplete="email"
-                className="bg-secondary border-border focus:ring-2 focus:ring-primary/20 focus:border-primary"
-              />
-            </div>
-
-            {/* Role */}
-            <div className="space-y-2">
-              <Label htmlFor="role">Role</Label>
-              <Select value={role} onValueChange={(value) => setRole(value as UserRole)} disabled={isLoading}>
-                <SelectTrigger className="bg-secondary border-border">
-                  <SelectValue placeholder="Select your role" />
-                </SelectTrigger>
-                <SelectContent>
-                  {roles.map((r) => (
-                    <SelectItem key={r.value} value={r.value}>
-                      {r.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Password */}
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <PasswordInput
-                id="password"
-                value={password}
-                onChange={setPassword}
-                placeholder="Create a secure password"
-                disabled={isLoading}
-                autoComplete="new-password"
-              />
-              <PasswordStrengthIndicator password={password} />
-            </div>
-
-            {/* Confirm Password */}
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <PasswordInput
-                id="confirmPassword"
-                value={confirmPassword}
-                onChange={setConfirmPassword}
-                placeholder="Confirm your password"
-                disabled={isLoading}
-                error={confirmPassword.length > 0 && !passwordsMatch}
-                autoComplete="new-password"
-              />
-              {confirmPassword && (
-                <div className={cn(
-                  "flex items-center gap-2 text-xs transition-colors",
-                  passwordsMatch ? "text-green-500" : "text-destructive"
-                )}>
-                  {passwordsMatch ? (
-                    <>
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      <span>Passwords match</span>
-                    </>
-                  ) : (
-                    <>
-                      <AlertCircle className="w-3.5 h-3.5" />
-                      <span>Passwords do not match</span>
-                    </>
-                  )}
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {error && (
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-sm animate-fade-in shadow-sm">
+                  <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                  <span>{error}</span>
                 </div>
               )}
-            </div>
 
-            {/* Terms acceptance */}
-            <div className="flex items-start gap-2">
-              <Checkbox
-                id="terms"
-                checked={acceptTerms}
-                onCheckedChange={(checked) => setAcceptTerms(checked === true)}
+              <div className="space-y-2.5 relative group">
+                <Label htmlFor="fullName" className="text-sm font-semibold text-foreground/90 ml-1">Full Name</Label>
+                <div className="relative">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                  <Input
+                    id="fullName"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    placeholder="Dr. Jane Doe"
+                    disabled={isLoading}
+                    className={cn(
+                      "bg-background/60 backdrop-blur-sm border-white/10 h-12 pl-12 pr-4 rounded-xl transition-all duration-300",
+                      "focus:bg-background focus:ring-2 focus:ring-primary/30 focus:border-primary shadow-inner"
+                    )}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2.5 relative group">
+                <Label htmlFor="email" className="text-sm font-semibold text-foreground/90 ml-1">Email Address</Label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="doctor@hospital.org"
+                    disabled={isLoading}
+                    className={cn(
+                      "bg-background/60 backdrop-blur-sm border-white/10 h-12 pl-12 pr-4 rounded-xl transition-all duration-300",
+                      "focus:bg-background focus:ring-2 focus:ring-primary/30 focus:border-primary shadow-inner",
+                      error && !email && "border-destructive focus:border-destructive"
+                    )}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2.5">
+                <Label htmlFor="password" className="text-sm font-semibold text-foreground/90 ml-1">Password</Label>
+                <PasswordInput
+                  id="password"
+                  value={password}
+                  onChange={setPassword}
+                  placeholder="Create a strong password"
+                  disabled={isLoading}
+                  error={!!error && !password}
+                />
+              </div>
+              
+              <div className="space-y-2.5">
+                <Label htmlFor="confirmPassword" className="text-sm font-semibold text-foreground/90 ml-1">Confirm Password</Label>
+                <PasswordInput
+                  id="confirmPassword"
+                  value={confirmPassword}
+                  onChange={setConfirmPassword}
+                  placeholder="Confirm your password"
+                  disabled={isLoading}
+                  error={!!error && !confirmPassword}
+                />
+              </div>
+
+              <Button
+                type="submit"
                 disabled={isLoading}
-                className="mt-0.5"
-              />
-              <Label htmlFor="terms" className="text-sm text-muted-foreground cursor-pointer leading-relaxed">
-                I agree to the{' '}
-                <Link to="/terms" className="text-primary hover:text-primary/80 transition-colors">
-                  Terms of Service
-                </Link>
-                {' '}and{' '}
-                <Link to="/privacy" className="text-primary hover:text-primary/80 transition-colors">
-                  Privacy Policy
-                </Link>
-              </Label>
-            </div>
-
-            {/* Submit button */}
-            <Button
-              type="submit"
-              variant="medical"
-              className="w-full h-11"
-              disabled={isLoading || !isFormValid}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Creating account...
-                </>
-              ) : (
-                'Create Account'
-              )}
-            </Button>
-
-            {/* Sign in link */}
-            <p className="text-center text-sm text-muted-foreground">
-              Already have an account?{' '}
-              <Link
-                to="/auth/login"
-                className="text-primary hover:text-primary/80 transition-colors font-medium"
+                className="w-full h-14 rounded-xl mt-6 text-lg font-bold bg-gradient-to-r from-primary to-blue-500 hover:from-primary/90 hover:to-blue-500/90 text-white shadow-[0_0_20px_rgba(var(--primary),0.3)] hover:shadow-[0_0_30px_rgba(var(--primary),0.5)] transition-all duration-300 transform hover:-translate-y-0.5"
               >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-6 w-6 animate-spin" />
+                    Creating account...
+                  </>
+                ) : (
+                  'Create Account'
+                )}
+              </Button>
+            </form>
+
+            <div className="mt-8 text-center text-sm text-muted-foreground font-medium">
+              Already have an account?{' '}
+              <Link to="/auth/login" className="font-bold text-primary hover:underline hover:text-primary/80 transition-colors">
                 Sign In
               </Link>
-            </p>
-          </form>
-        </AuthCard>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );

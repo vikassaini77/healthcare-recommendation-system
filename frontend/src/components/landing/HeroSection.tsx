@@ -90,110 +90,41 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Right content - Animated Medical Visual */}
+                    {/* Right content - Animated Medical Visual */}
           <div className="relative flex justify-center lg:justify-end animate-fade-in opacity-0" style={{ animationDelay: "0.5s", animationFillMode: "forwards" }}>
             <div className="relative w-full max-w-lg aspect-square">
               {/* Main container with glow */}
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-card to-secondary/50 border border-border shadow-glow-lg overflow-hidden">
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-card to-secondary/50 border border-border shadow-glow-lg overflow-hidden group">
+                
+                {/* Hero Image */}
+                <img src="/hero-xray.jpg" alt="AI Medical Analysis" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                
+                {/* Overlay gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+                
                 {/* Scan line effect */}
-                <div className="absolute inset-0 scan-line" />
+                <div className="absolute inset-0 scan-line mix-blend-overlay opacity-50" />
                 
-                {/* X-ray visualization */}
-                <div className="absolute inset-8 flex items-center justify-center">
-                  <svg
-                    viewBox="0 0 200 200"
-                    className="w-full h-full"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    {/* Chest outline */}
-                    <path
-                      d="M100 30 C60 30, 30 60, 30 100 C30 150, 50 170, 100 170 C150 170, 170 150, 170 100 C170 60, 140 30, 100 30"
-                      className="stroke-primary/30 stroke-2 fill-none"
-                    />
-                    
-                    {/* Ribcage lines */}
-                    {[45, 60, 75, 90, 105, 120].map((y, i) => (
-                      <path
-                        key={y}
-                        d={`M${50 + i * 2} ${y} Q100 ${y + 5}, ${150 - i * 2} ${y}`}
-                        className="stroke-primary/20 stroke-1 fill-none"
-                      />
-                    ))}
-                    
-                    {/* Left Lung */}
-                    <path
-                      d="M70 55 C45 60, 35 85, 35 110 C35 145, 55 160, 75 160 C90 160, 95 145, 95 125 L95 75 C95 65, 85 55, 70 55"
-                      className="fill-primary/5 stroke-primary/40 stroke-2"
-                    />
-                    
-                    {/* Right Lung */}
-                    <path
-                      d="M130 55 C155 60, 165 85, 165 110 C165 145, 145 160, 125 160 C110 160, 105 145, 105 125 L105 75 C105 65, 115 55, 130 55"
-                      className="fill-primary/5 stroke-primary/40 stroke-2"
-                    />
-
-                    {/* Heart */}
-                    <ellipse
-                      cx="100"
-                      cy="105"
-                      rx="18"
-                      ry="22"
-                      className="fill-primary/10 stroke-primary/50 stroke-2 animate-heartbeat"
-                    />
-
-                    {/* Grad-CAM Heatmap overlays */}
-                    <ellipse
-                      cx="60"
-                      cy="100"
-                      rx="22"
-                      ry="30"
-                      fill="url(#heroHeatmap1)"
-                      className="animate-pulse opacity-70"
-                      style={{ animationDuration: "3s" }}
-                    />
-                    <ellipse
-                      cx="140"
-                      cy="95"
-                      rx="18"
-                      ry="25"
-                      fill="url(#heroHeatmap2)"
-                      className="animate-pulse opacity-50"
-                      style={{ animationDuration: "3.5s", animationDelay: "0.5s" }}
-                    />
-
-                    <defs>
-                      <radialGradient id="heroHeatmap1" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stopColor="hsl(0, 80%, 55%)" stopOpacity="0.6" />
-                        <stop offset="40%" stopColor="hsl(30, 90%, 55%)" stopOpacity="0.4" />
-                        <stop offset="100%" stopColor="transparent" stopOpacity="0" />
-                      </radialGradient>
-                      <radialGradient id="heroHeatmap2" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stopColor="hsl(45, 90%, 55%)" stopOpacity="0.5" />
-                        <stop offset="60%" stopColor="hsl(80, 70%, 50%)" stopOpacity="0.3" />
-                        <stop offset="100%" stopColor="transparent" stopOpacity="0" />
-                      </radialGradient>
-                    </defs>
-                  </svg>
-                </div>
-
                 {/* Floating data points */}
-                <div className="absolute top-6 right-6 bg-card/80 backdrop-blur-sm border border-border rounded-lg p-3 animate-float" style={{ animationDelay: "0.5s" }}>
-                  <div className="text-xs text-muted-foreground">AI Confidence</div>
-                  <div className="text-lg font-bold text-primary">94.7%</div>
+                <div className="absolute top-6 right-6 bg-card/80 backdrop-blur-md border border-border/50 rounded-lg p-3 shadow-lg animate-float" style={{ animationDelay: "0.5s" }}>
+                  <div className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">AI Confidence</div>
+                  <div className="text-xl font-bold text-primary">94.7%</div>
                 </div>
                 
-                <div className="absolute bottom-6 left-6 bg-card/80 backdrop-blur-sm border border-border rounded-lg p-3 animate-float" style={{ animationDelay: "1s" }}>
-                  <div className="text-xs text-muted-foreground">Risk Level</div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-risk-medium" />
-                    <span className="text-sm font-medium text-foreground">Moderate</span>
+                <div className="absolute bottom-6 left-6 bg-card/80 backdrop-blur-md border border-border/50 rounded-lg p-3 shadow-lg animate-float" style={{ animationDelay: "1s" }}>
+                  <div className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Risk Level</div>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="relative flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
+                    </span>
+                    <span className="text-sm font-bold text-foreground">Moderate</span>
                   </div>
                 </div>
               </div>
 
               {/* Decorative rings */}
-              <div className="absolute -inset-4 rounded-3xl border border-primary/10 animate-pulse" style={{ animationDuration: "4s" }} />
+              <div className="absolute -inset-4 rounded-3xl border border-primary/20 animate-pulse" style={{ animationDuration: "4s" }} />
               <div className="absolute -inset-8 rounded-3xl border border-primary/5" />
             </div>
           </div>

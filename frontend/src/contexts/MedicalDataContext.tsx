@@ -132,20 +132,7 @@ export function MedicalDataProvider({ children }: { children: React.ReactNode })
   const addScan = useCallback(
     (scanData: Omit<Scan, "id" | "caseId" | "createdAt">): Scan => {
       
-      // --- 🛠️ AUTO-FIX CONFIDENCE LOGIC ---
       let safeConfidence = Number(scanData.confidence);
-
-      // 1. If backend sends whole number (98.5), convert to decimal (0.985)
-      // This prevents "9850%" errors in your stats
-      if (safeConfidence > 1) {
-        safeConfidence = safeConfidence / 100;
-      }
-
-      // 2. If backend sends 0 (bug), force a high demo value (0.95)
-      // This prevents the "0% Confidence" bug on new uploads
-      if (safeConfidence === 0) {
-        safeConfidence = 0.95; 
-      }
 
       const scan: Scan = {
         ...scanData,

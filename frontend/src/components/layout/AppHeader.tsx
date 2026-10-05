@@ -1,8 +1,9 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { NotificationBell } from "@/components/ui/NotificationBell";
-import { LogOut, Settings as SettingsIcon, User, CreditCard, Bell } from "lucide-react";
+import { LogOut, Settings as SettingsIcon, User, CreditCard, Bell, Search } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useTheme } from "@/components/ThemeProvider";
 import { Sun, Moon } from "lucide-react";
 import {
@@ -17,6 +18,7 @@ import {
 const AppHeader = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const { theme, setTheme } = useTheme();
 
   const handleSignOut = async () => {
     await signOut();
@@ -54,7 +56,28 @@ const AppHeader = () => {
 
   return (
     <header className="sticky top-0 z-30 h-16 bg-background/80 backdrop-blur-md border-b border-border flex items-center justify-between px-6">
-      <div className="flex-1" /> {/* Empty space on left since sidebar is there */}
+            <div className="flex-1 flex items-center gap-4 px-2">
+        <div 
+          className="relative w-full max-w-lg hidden md:flex items-center p-1.5 rounded-full border border-border shadow-md overflow-hidden"
+          style={{
+            backgroundImage: "url('/search-banner.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center"
+          }}
+        >
+          {/* Overlay to ensure search bar is legible over the image */}
+          <div className="absolute inset-0 bg-background/50 backdrop-blur-[2px]"></div>
+          
+          <div className="relative w-full flex items-center bg-background/90 rounded-full shadow-sm border border-border/40 focus-within:ring-2 focus-within:ring-primary/50 transition-all">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
+            <Input
+              type="search"
+              placeholder="Search patients, scans, or AI reports..."
+              className="w-full bg-transparent border-none pl-9 h-9 rounded-full focus-visible:ring-0 placeholder:text-muted-foreground/80 font-medium text-sm"
+            />
+          </div>
+        </div>
+      </div>
       
       <div className="flex items-center gap-4">
         {/* System Status - Subtle dot */}

@@ -46,8 +46,11 @@ const Dashboard = () => {
     }
   };
 
+
   // Select a primary scan for the center view
   const primaryScan = scans.length > 0 ? scans[0] : null;
+  const primaryPatient = primaryScan ? patients.find(p => p.patientId === primaryScan.patientId || p.id === primaryScan.patientId) : null;
+
 
   return (
     <AppLayout>
@@ -141,15 +144,15 @@ const Dashboard = () => {
                   </div>
                   <div className="flex justify-between border-b border-border pb-2">
                     <span className="text-muted-foreground">Name</span>
-                    <span className="font-medium">{primaryScan.patientName}</span>
+                    <span className="font-medium">{primaryPatient ? `${primaryPatient.firstName} ${primaryPatient.lastName}` : 'Unknown'}</span>
                   </div>
                   <div className="flex justify-between border-b border-border pb-2">
                     <span className="text-muted-foreground">Age</span>
-                    <span className="font-medium">{primaryScan.patientAge}</span>
+                    <span className="font-medium">{primaryPatient ? new Date().getFullYear() - new Date(primaryPatient.dateOfBirth).getFullYear() : '--'}</span>
                   </div>
                   <div className="flex justify-between border-b border-border pb-2">
                     <span className="text-muted-foreground">Gender</span>
-                    <span className="font-medium">{primaryScan.patientGender}</span>
+                    <span className="font-medium">{primaryPatient?.gender || '--'}</span>
                   </div>
                   <div className="flex justify-between border-b border-border pb-2">
                     <span className="text-muted-foreground">Modality</span>
@@ -157,7 +160,7 @@ const Dashboard = () => {
                   </div>
                   <div className="flex justify-between pt-1">
                     <span className="text-muted-foreground">Date</span>
-                    <span className="font-medium">{new Date(primaryScan.date).toLocaleDateString()}</span>
+                    <span className="font-medium">{new Date(primaryScan.createdAt).toLocaleDateString()}</span>
                   </div>
                 </div>
               ) : (
@@ -168,7 +171,7 @@ const Dashboard = () => {
             {/* Motivational Image Card */}
             <Card className="overflow-hidden border-border bg-primary/5 shadow-sm relative">
               <img 
-                src="https://images.unsplash.com/photo-1576091160550-2173ff9e5ee5?q=80&w=600&auto=format&fit=crop" 
+                src="/doctors_collaborating.jpg" 
                 alt="Doctors collaborating" 
                 className="w-full h-40 object-cover opacity-90"
               />
@@ -179,62 +182,86 @@ const Dashboard = () => {
             </Card>
           </div>
 
-          {/* Center Column - Analysis */}
+                    {/* Center Column - Analysis */}
           <div className="space-y-6 lg:col-span-2">
-            <Card className="p-6 border-border bg-card shadow-sm h-full flex flex-col">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-lg flex items-center gap-2">
+            <Card className="p-6 border-border bg-card shadow-sm h-full flex flex-col relative overflow-hidden">
+              {/* Subtle background glow effect */}
+              <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-primary/5 blur-[80px] pointer-events-none" />
+              
+              <div className="flex justify-between items-center mb-6 relative z-10">
+                <h3 className="font-semibold text-xl flex items-center gap-2">
                   <Activity className="w-5 h-5 text-primary" />
                   AI Prediction & Explainability
                 </h3>
                 {primaryScan && (
-                  <div className={`px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1.5 border ${getRiskBg(primaryScan.riskLevel)} ${getRiskColor(primaryScan.riskLevel)} border-${primaryScan.riskLevel === 'high' ? 'red' : 'emerald'}-200`}>
-                    <span className="relative flex h-2 w-2">
-                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${primaryScan.riskLevel === 'high' ? 'bg-red-400' : 'bg-emerald-400'}`}></span>
-                      <span className={`relative inline-flex rounded-full h-2 w-2 ${primaryScan.riskLevel === 'high' ? 'bg-red-500' : 'bg-emerald-500'}`}></span>
+                  <div className={`px-4 py-1.5 rounded-full text-sm font-semibold flex items-center gap-2 border ${getRiskBg(primaryScan.risk)} ${getRiskColor(primaryScan.risk)} border-${primaryScan.risk === 'high' ? 'red' : 'emerald'}-500/30 shadow-sm backdrop-blur-sm`}>
+                    <span className="relative flex h-2.5 w-2.5">
+                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${primaryScan.risk === 'high' ? 'bg-red-400' : 'bg-emerald-400'}`}></span>
+                      <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${primaryScan.risk === 'high' ? 'bg-red-500' : 'bg-emerald-500'}`}></span>
                     </span>
-                    {primaryScan.diagnosis} Detected ({primaryScan.confidence}%)
+                    <span>{primaryScan.prediction} Detected</span>
+                    <span className="opacity-70 font-normal">|</span>
+                    <span className="font-bold">
+                      {(Number(primaryScan.confidence) <= 1 ? Number(primaryScan.confidence) * 100 : Number(primaryScan.confidence)).toFixed(1)}% Confidence
+                    </span>
                   </div>
                 )}
               </div>
 
               {primaryScan ? (
-                <div className="grid grid-cols-2 gap-4 flex-1">
-                  <div className="flex flex-col">
-                    <p className="text-xs font-medium text-muted-foreground mb-2 text-center uppercase tracking-wider">Original X-Ray</p>
-                    <div className="relative flex-1 rounded-xl overflow-hidden bg-black/5 border border-border min-h-[250px]">
-                      <img src={primaryScan.imageUrl} alt="Original" className="w-full h-full object-contain" />
-                      <span className="absolute top-3 left-3 bg-black/60 text-white text-xs font-bold px-2 py-1 rounded">R</span>
+                <div className="grid grid-cols-2 gap-6 flex-1 relative z-10">
+                  <div className="flex flex-col group">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-sm font-semibold text-foreground flex items-center gap-2">
+                        <ImageIcon className="w-4 h-4 text-muted-foreground" />
+                        Original X-Ray
+                      </p>
+                    </div>
+                    <div className="relative flex-1 rounded-xl overflow-hidden bg-black/40 border border-border/50 min-h-[300px] shadow-inner group-hover:border-primary/30 transition-colors">
+                      <img src={primaryScan.imageData} alt="Original" className="w-full h-full object-contain" />
+                      <div className="absolute top-3 left-3 bg-background/80 backdrop-blur-md text-foreground text-[10px] font-bold px-2 py-1 rounded shadow-sm border border-border/50">R</div>
                     </div>
                   </div>
-                  <div className="flex flex-col">
-                    <p className="text-xs font-medium text-primary mb-2 text-center uppercase tracking-wider">Grad-CAM Heatmap</p>
-                    <div className="relative flex-1 rounded-xl overflow-hidden bg-black/5 border border-primary/30 min-h-[250px]">
-                      {/* Combine original and heatmap for overlay effect */}
-                      <img src={primaryScan.imageUrl} alt="Base" className="absolute inset-0 w-full h-full object-contain opacity-80" />
-                      {primaryScan.heatmapUrl && (
-                        <img src={primaryScan.heatmapUrl} alt="Heatmap" className="absolute inset-0 w-full h-full object-contain mix-blend-screen opacity-90" />
+                  <div className="flex flex-col group">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-sm font-semibold text-primary flex items-center gap-2">
+                        <Zap className="w-4 h-4" />
+                        Grad-CAM Heatmap
+                      </p>
+                    </div>
+                    <div className="relative flex-1 rounded-xl overflow-hidden bg-black/40 border border-primary/30 min-h-[300px] shadow-[0_0_15px_rgba(var(--primary),0.1)] group-hover:shadow-[0_0_20px_rgba(var(--primary),0.2)] transition-all">
+                      <img src={primaryScan.imageData} alt="Base" className="absolute inset-0 w-full h-full object-contain opacity-70" />
+                      {primaryScan.gradcamData && (
+                        <img src={primaryScan.gradcamData} alt="Heatmap" className="absolute inset-0 w-full h-full object-contain mix-blend-screen opacity-100" />
                       )}
                       
-                      {/* Heatmap Legend */}
-                      <div className="absolute right-3 top-3 bottom-3 w-4 rounded-full bg-gradient-to-b from-red-600 via-yellow-400 to-blue-600 border border-black/20" />
-                      <span className="absolute right-8 top-3 text-[10px] font-bold text-foreground bg-background/80 px-1 rounded">High</span>
-                      <span className="absolute right-8 bottom-3 text-[10px] font-bold text-foreground bg-background/80 px-1 rounded">Low</span>
+                      {/* Elegant Heatmap Legend */}
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2 bg-background/60 backdrop-blur-md p-1.5 rounded-full border border-border/50 shadow-sm">
+                        <span className="text-[9px] font-bold text-foreground uppercase tracking-wider">High</span>
+                        <div className="w-1.5 h-24 rounded-full bg-gradient-to-b from-red-500 via-yellow-400 to-blue-500" />
+                        <span className="text-[9px] font-bold text-foreground uppercase tracking-wider">Low</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               ) : (
-                <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground min-h-[300px]">
+                <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground min-h-[300px] bg-secondary/20 rounded-xl border border-dashed border-border/60 m-2">
                   <ImageIcon className="w-12 h-12 mb-3 opacity-20" />
                   <p>Upload a scan to view AI analysis.</p>
                 </div>
               )}
               
-              <div className="mt-4 pt-4 border-t border-border flex justify-between items-center">
-                <p className="text-sm text-muted-foreground">The highlighted regions indicate the areas in the image that most influenced the model's prediction.</p>
+              <div className="mt-6 pt-5 border-t border-border/60 flex justify-between items-center relative z-10 bg-secondary/10 -mx-6 -mb-6 px-6 pb-6 rounded-b-xl">
+                <p className="text-sm text-muted-foreground flex items-center gap-2">
+                  <Activity className="w-4 h-4 text-primary/70" />
+                  Highlighted regions indicate the areas that most influenced the AI's prediction.
+                </p>
                 {primaryScan && (
                   <Link to={`/explainability/${primaryScan.id}`}>
-                    <Button size="sm">Full Report</Button>
+                    <Button size="sm" className="shadow-sm group">
+                      Full Explainability Report
+                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </Button>
                   </Link>
                 )}
               </div>
@@ -321,12 +348,12 @@ const Dashboard = () => {
               <tbody>
                 {scans.slice(0, 5).map((scan) => (
                   <tr key={scan.id} className="border-b border-border hover:bg-muted/50 transition-colors">
-                    <td className="px-4 py-3 whitespace-nowrap">{new Date(scan.date).toLocaleString()}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{new Date(scan.createdAt).toLocaleString()}</td>
                     <td className="px-4 py-3 font-medium">{scan.patientId}</td>
                     <td className="px-4 py-3">
-                      <span className={`flex items-center gap-1.5 font-medium ${getRiskColor(scan.riskLevel)}`}>
-                        <div className={`w-2 h-2 rounded-full ${scan.riskLevel === 'high' ? 'bg-red-500' : 'bg-emerald-500'}`} />
-                        {scan.diagnosis}
+                      <span className={`flex items-center gap-1.5 font-medium ${getRiskColor(scan.risk)}`}>
+                        <div className={`w-2 h-2 rounded-full ${scan.risk === 'high' ? 'bg-red-500' : 'bg-emerald-500'}`} />
+                        {scan.prediction}
                       </span>
                     </td>
                     <td className="px-4 py-3">{scan.confidence}%</td>
