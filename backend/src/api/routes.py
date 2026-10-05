@@ -7,9 +7,6 @@ import io
 import uuid
 import cv2
 import json
-
-from src.ml_inference.model_xray import load_model
-from src.ml_inference.gradcam import GradCAM, create_heatmap
 from src.ml_inference.model import predict_disease, get_all_symptoms
 from src.domain.schemas import PredictionRequest, PredictionResponse, SymptomsResponse, XRayPredictionResponse, HolisticPredictionResponse, ChatRequest, ChatResponse
 from src.services.llm_service import generate_holistic_summary, generate_chat_response
@@ -17,14 +14,22 @@ from src.services.llm_service import generate_holistic_summary, generate_chat_re
 router = APIRouter()
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-xray_model = load_model()
-gradcam = GradCAM(xray_model, xray_model.features.denseblock4)
 
-transform = transforms.Compose([
-    transforms.Resize((224,224)),
-    transforms.ToTensor(),
-    transforms.Normalize([0.485,0.456,0.406],[0.229,0.224,0.225])
-])
+ENABLE_XRAY = os.environ.get("ENABLE_XRAY", "false").lower() == "true"
+xray_model = None
+gradcam = None
+transform = None
+
+if ENABLE_XRAY:
+    from src.ml_inference.model_xray import load_model
+    from src.ml_inference.gradcam import GradCAM, create_heatmap
+    xray_model = load_model()
+    gradcam = GradCAM(xray_model, xray_model.features.denseblock4)
+    transform = transforms.Compose([
+        transforms.Resize((224,224)),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485,0.456,0.406],[0.229,0.224,0.225])
+    ])
 
 @router.get("/symptoms", response_model=SymptomsResponse)
 async def get_symptoms():
@@ -37,6 +42,15 @@ async def predict_symptoms(request: PredictionRequest):
 
 @router.post("/predict_xray", response_model=XRayPredictionResponse)
 async def predict_xray(file: UploadFile = File(...)):
+    if not ENABLE_XRAY:
+        return XRayPredictionResponse(
+            case_id=str(uuid.uuid4()),
+            prediction="X-Ray Analysis Disabled (Memory Save Mode)",
+            confidence=0.0,
+            risk_level="Unknown",
+            gradcam=""
+        )
+
     image = Image.open(io.BytesIO(await file.read())).convert("RGB")
     x = transform(image).unsqueeze(0).to(DEVICE)
     x.requires_grad = True
