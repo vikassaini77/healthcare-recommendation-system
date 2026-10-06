@@ -1,18 +1,18 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 
 class PatientProfile(BaseModel):
-    name: str = "Unknown"
-    age: int
-    gender: str
-    weight: float
-    height: float
-    conditions: List[str]
-    allergies: List[str] = []
+    name: str = Field(default="Unknown")
+    age: int = Field(gt=0, le=120, description="Age must be between 1 and 120")
+    gender: str = Field(pattern="^(Male|Female|Other)$", description="Must be Male, Female, or Other")
+    weight: float = Field(gt=0, description="Weight in kg must be > 0")
+    height: float = Field(gt=0, description="Height in cm must be > 0")
+    conditions: List[str] = Field(default_factory=list)
+    allergies: List[str] = Field(default_factory=list)
     pregnancy_status: Optional[str] = None
-    current_medications: List[str] = []
-    disease_severity: str = "Moderate"
-    symptom_duration: str = "Unknown"
+    current_medications: List[str] = Field(default_factory=list)
+    disease_severity: str = Field(default="Moderate")
+    symptom_duration: str = Field(default="Unknown")
 
 class PredictionRequest(BaseModel):
     symptoms: List[str]

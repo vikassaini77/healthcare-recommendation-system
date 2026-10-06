@@ -413,6 +413,14 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
+## 27. Disaster Recovery & Backup Strategy <a name="disaster-recovery"></a>
+
+When deploying MedVision AI to production, a comprehensive Disaster Recovery (DR) and Backup Strategy must be implemented via cloud infrastructure:
+- **Database Backups**: Use managed PostgreSQL (e.g., AWS RDS or Google Cloud SQL) with automated daily snapshots and continuous point-in-time recovery (PITR) enabled.
+- **Failover**: Deploy the backend and frontend across multi-AZ (Availability Zone) clusters using Kubernetes (EKS/GKE).
+- **Data Retention**: Patient records and logs should adhere to HIPAA/GDPR retention policies (e.g., cold storage in Amazon S3 Glacier after 7 years).
+- **Rate Limiting**: Production endpoints are shielded by `slowapi` rate limiters (e.g., 100 req/min) to prevent abuse of the LLM and API surfaces.
+
 ## 27. Executive Summary <a name="executive-summary"></a>
 
 **MedVision AI** represents the pinnacle of modern applied AI in healthcare. By meticulously combining state-of-the-art Deep Learning (DenseNet121) for radiology, classical Machine Learning for symptom triage, and Generative AI (Gemini) for clinical summarization, the system serves as a powerful co-pilot for healthcare professionals. Built on a FAANG-standard architecture, MedVision AI is highly scalable, incredibly fast, and ready to be deployed into enterprise healthcare environments to fundamentally improve patient care and diagnostic accuracy.
