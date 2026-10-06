@@ -8,7 +8,7 @@ def generate_holistic_summary(symptom_prediction: str, patient_profile: dict, xr
         
     try:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel("gemini-3.6-flash")
+        model = genai.GenerativeModel("gemini-1.5-flash")
         
         prompt = f"You are a medical AI assistant. Summarize the following findings for a patient:\n"
         prompt += f"- Symptoms Prediction: {symptom_prediction}\n"
@@ -16,12 +16,15 @@ def generate_holistic_summary(symptom_prediction: str, patient_profile: dict, xr
             prompt += f"- Patient Age: {patient_profile.get('age')}, Gender: {patient_profile.get('gender')}\n"
         if xray_prediction:
             prompt += f"- Chest X-Ray: {xray_prediction} ({xray_confidence*100:.1f}% confidence)\n"
-        prompt += "\nProvide a concise 2-sentence holistic summary. Do not diagnose, just summarize the risk and findings."
+        prompt += "\nProvide a concise 2-sentence holistic summary. CONSTRAINTS: Do not invent new diagnoses, do not recommend unlisted medications, do not provide drug doses. ONLY use the structured findings provided. End with this exact disclaimer: 'Disclaimer: This summary is AI-generated and not medical advice. Consult a doctor.'"
         
-        response = model.generate_content(prompt)
+        # Setting a timeout is done via generation config in python sdk if supported, or via grpc, but we will handle it via requestOptions if needed.
+        # But generally, for gemini, timeout can be controlled at transport layer.
+        response = model.generate_content(prompt, request_options={'timeout': 10.0})
         return response.text
     except Exception as e:
-        print("Gemini API Error:", e)
+        import logging
+        logging.error(f"Gemini API Error: {e}")
         return _fallback_summary(symptom_prediction, xray_prediction, xray_confidence)
 
 def generate_personalized_symptom_summary(symptoms_list: list, prediction: str, patient_profile=None) -> str:
@@ -31,7 +34,7 @@ def generate_personalized_symptom_summary(symptoms_list: list, prediction: str, 
         
     try:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel("gemini-3.6-flash")
+        model = genai.GenerativeModel("gemini-1.5-flash")
         
         prompt = "You are an AI healthcare information assistant. "
         if patient_profile:
@@ -52,10 +55,11 @@ def generate_personalized_symptom_summary(symptoms_list: list, prediction: str, 
             "Write a highly personalized, empathetic 3-sentence summary tailored EXACTLY "
             "to their profile and specific symptoms. DO NOT list medications, and explicitly remind them to consult a doctor."
         )
-        res = model.generate_content(prompt)
+        res = model.generate_content(prompt, request_options={'timeout': 10.0})
         return res.text.strip() if res.text else ""
     except Exception as e:
-        print("Gemini Personalization Error:", e)
+        import logging
+        logging.error(f"Gemini Personalization Error: {e}")
         return ""
 
 def generate_chat_response(messages: list) -> str:
@@ -65,7 +69,7 @@ def generate_chat_response(messages: list) -> str:
         
     try:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel("gemini-3.6-flash")
+        model = genai.GenerativeModel("gemini-1.5-flash")
         
         formatted_prompt = "You are MedVision AI, an intelligent medical assistant. You help doctors and patients understand medical data, predict risks, and analyze X-Rays. Always be polite, concise, and remind users that you are an AI and not a substitute for a real doctor.\n\nConversation history:\n"
         
@@ -75,10 +79,11 @@ def generate_chat_response(messages: list) -> str:
             
         formatted_prompt += "MedVision AI:"
         
-        response = model.generate_content(formatted_prompt)
+        response = model.generate_content(formatted_prompt, request_options={'timeout': 15.0})
         return response.text
     except Exception as e:
-        print("Gemini API Chat Error:", e)
+        import logging
+        logging.error(f"Gemini API Chat Error: {e}")
         return "I apologize, but I am currently having trouble connecting to my AI brain. Please try again later."
 
 def _fallback_summary(symptom_prediction: str, xray_prediction: str = None, xray_confidence: float = None) -> str:

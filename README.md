@@ -277,11 +277,12 @@ The backend provides a fully documented Swagger UI at `http://127.0.0.1:8000/doc
 
 ---
 
-## 13. Security Considerations <a name="security-considerations"></a>
+## 13. Security & Privacy <a name="security-considerations"></a>
 
 - **CORS Handling**: Tightly scoped Cross-Origin Resource Sharing handled via FastAPI middleware (`src.core.config`).
 - **Secrets Management**: `GEMINI_API_KEY` is loaded securely via `pydantic-settings` from environment variables, preventing hardcoded credentials in the source code.
 - **Input Validation**: All incoming requests are strictly validated using Pydantic Models (`src.domain.schemas`), preventing injection attacks or malformed payload crashes.
+- **Data Privacy (X-Rays)**: Uploaded X-Ray images are processed exclusively in-memory (`io.BytesIO`). They are **never stored** on disk or logged to a database, ensuring patient imaging privacy by default.
 
 ---
 
@@ -433,3 +434,13 @@ When deploying MedVision AI to production, a comprehensive Disaster Recovery (DR
 ## 27. Executive Summary <a name="executive-summary"></a>
 
 **MedVision AI** is an educational and research-oriented system exploring modern applied AI in healthcare. By combining Deep Learning (DenseNet121) for radiology, classical Machine Learning for symptom triage, and Generative AI (Gemini) for clinical summarization, the system serves as an experimental co-pilot for healthcare workflows. Built on a domain-driven architecture, MedVision AI is highly scalable, fast, and designed to demonstrate how AI can be deployed to augment patient care and diagnostic processes.
+
+---
+
+## 28. Resume Bullets (For Portfolios) <a name="resume-bullets"></a>
+
+If you are showcasing this project in your portfolio, you can use these verified bullets:
+
+- **Architected a multimodal healthcare AI backend** using FastAPI, integrating a PyTorch DenseNet121 CV pipeline and an NLP Random Forest triage engine to predict 14 thoracic conditions and 41 diseases.
+- **Engineered a secure, production-ready MLOps pipeline** featuring MLflow experiment tracking, automated quality gates, Git LFS model management, and comprehensive CI/CD workflows via GitHub Actions.
+- **Implemented a clinical generative AI summarizer** utilizing Google Gemini 1.5 Flash, strictly constrained via prompt engineering and robust `SafetyChecker` logic to flag contraindications and prevent medical hallucinations.

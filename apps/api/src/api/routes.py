@@ -8,9 +8,13 @@ import uuid
 import cv2
 import json
 import os
+from fastapi import HTTPException
 from ml.inference.model import predict_disease, get_all_symptoms
 from apps.api.src.schemas.schemas import PredictionRequest, PredictionResponse, SymptomsResponse, XRayPredictionResponse, HolisticPredictionResponse, ChatRequest, ChatResponse
 from packages.ai.services.llm_service import generate_holistic_summary, generate_chat_response
+
+MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
+ALLOWED_MIME_TYPES = {"image/jpeg", "image/png"}
 
 router = APIRouter()
 
@@ -52,7 +56,14 @@ async def predict_xray(file: UploadFile = File(...)):
             gradcam=""
         )
 
-    image = Image.open(io.BytesIO(await file.read())).convert("RGB")
+    if file.content_type not in ALLOWED_MIME_TYPES:
+        raise HTTPException(status_code=400, detail="Invalid file type. Only JPEG and PNG are supported.")
+        
+    content = await file.read()
+    if len(content) > MAX_FILE_SIZE:
+        raise HTTPException(status_code=400, detail="File size exceeds 5MB limit.")
+
+    image = Image.open(io.BytesIO(content)).convert("RGB")
     x = transform(image).unsqueeze(0).to(DEVICE)
     x.requires_grad = True
 
@@ -81,7 +92,7 @@ async def predict_xray(file: UploadFile = File(...)):
     if confidence >= 0.5:
         label = DISEASES[pred_class]
     else:
-        label = "No Findings"
+        label = "Inconclusive (Low Confidence)"
     risk = "High" if label == "Pneumonia" and confidence >= 0.75 else "Medium" if label == "Pneumonia" and confidence >= 0.45 else "Low"
 
     return XRayPredictionResponse(
@@ -97,6 +108,11 @@ async def predict_holistic(
     file: UploadFile = File(None),
     data: str = Form(...) 
 ):
+    if file:
+        if file.content_type not in ALLOWED_MIME_TYPES:
+            raise HTTPException(status_code=400, detail="Invalid file type. Only JPEG and PNG are supported.")
+        # We check size inside the memory read for holistic if xray enabled.
+    
     payload = json.loads(data)
     request = PredictionRequest(**payload)
     
