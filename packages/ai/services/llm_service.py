@@ -35,10 +35,16 @@ def generate_personalized_symptom_summary(symptoms_list: list, prediction: str, 
         
         prompt = "You are an AI healthcare information assistant. "
         if patient_profile:
+            bmi_str = ""
+            if getattr(patient_profile, 'weight', None) and getattr(patient_profile, 'height', None):
+                height_m = patient_profile.height / 100.0
+                bmi = patient_profile.weight / (height_m * height_m)
+                bmi_str = f", Derived BMI={bmi:.1f}"
+                
             prompt += (
                 f"Patient Profile: Name={getattr(patient_profile, 'name', 'Patient')}, "
                 f"Age={patient_profile.age}, Gender={patient_profile.gender}, Weight={patient_profile.weight}kg, "
-                f"Height={getattr(patient_profile, 'height', 170)}cm, Pre-existing Conditions={', '.join(patient_profile.conditions)}.\n"
+                f"Height={getattr(patient_profile, 'height', 170)}cm{bmi_str}, Pre-existing Conditions={', '.join(patient_profile.conditions)}.\n"
             )
         prompt += (
             f"Symptoms: {', '.join(symptoms_list)}.\n"

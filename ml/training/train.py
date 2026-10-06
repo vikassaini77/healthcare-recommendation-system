@@ -79,22 +79,30 @@ def train_and_evaluate():
     y_test_pred = model.predict(X_test)
     test_accuracy = accuracy_score(y_test, y_test_pred)
     
+    from sklearn.metrics import balanced_accuracy_score
+    bal_acc = balanced_accuracy_score(y_test, y_test_pred)
+    
     report = classification_report(y_test, y_test_pred)
     conf_matrix = confusion_matrix(y_test, y_test_pred)
     precision, recall, f1, _ = precision_recall_fscore_support(y_test, y_test_pred, average='weighted')
+    macro_p, macro_r, macro_f1, _ = precision_recall_fscore_support(y_test, y_test_pred, average='macro')
 
     print(f"Test Accuracy: {test_accuracy * 100:.2f}%")
+    print(f"Balanced Accuracy: {bal_acc * 100:.2f}%")
     
     # Save evaluation metrics
-    report_path = os.path.join(MODEL_DIR, 'evaluation_report.txt')
+    os.makedirs(os.path.join(MODEL_DIR, 'disease', 'v1.0.0'), exist_ok=True)
+    report_path = os.path.join(MODEL_DIR, 'disease', 'v1.0.0', 'evaluation_report.txt')
     with open(report_path, 'w') as f:
-        f.write("=== Disease Prediction Model Evaluation ===\n")
-        f.write(f"Duplicate Rows in Dataset: {duplicates}\n")
+        f.write("=== Disease Prediction Model Evaluation (v1.0.0) ===\n")
+        f.write(f"Deduplicated Rows Removed: {original_len - len(df)}\n")
         f.write(f"Stratified CV (5-Fold) Accuracy: {cv_scores.mean()*100:.2f}% (+/- {cv_scores.std()*200:.2f}%)\n")
         f.write(f"Test Accuracy: {test_accuracy * 100:.2f}%\n")
+        f.write(f"Balanced Accuracy: {bal_acc * 100:.2f}%\n")
         f.write(f"Weighted Precision: {precision * 100:.2f}%\n")
         f.write(f"Weighted Recall: {recall * 100:.2f}%\n")
-        f.write(f"Weighted F1-Score: {f1 * 100:.2f}%\n\n")
+        f.write(f"Weighted F1-Score: {f1 * 100:.2f}%\n")
+        f.write(f"Macro F1-Score: {macro_f1 * 100:.2f}%\n\n")
         f.write("--- Classification Report ---\n")
         f.write(report)
         f.write("\n\n--- Confusion Matrix ---\n")
@@ -103,7 +111,7 @@ def train_and_evaluate():
     print(f"Evaluation report saved to {report_path}")
 
     # Save model
-    joblib.dump(model, os.path.join(MODEL_DIR, 'disease_model.pkl'))
+    joblib.dump(model, os.path.join(MODEL_DIR, 'disease', 'v1.0.0', 'disease_model.pkl'))
     
     # Read other metadata logic (kept intact but updating paths)
     desc_df = pd.read_csv(os.path.join(DATA_RAW_DIR, 'symptom_Description.csv'))

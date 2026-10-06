@@ -91,9 +91,9 @@ class MedicalKnowledgeBase:
                 
         # Default fallback if disease is not fully mapped yet
         return {
-            "medicines": ["Acetaminophen", "Ibuprofen"], # Generic safe choices for minor symptoms
+            "medicines": [], # Do not recommend generic medicines for unknown diseases
             "contraindications": [],
-            "precautions": ["Consult a healthcare provider for proper diagnosis and treatment plan."],
+            "precautions": ["URGENT: Consult a healthcare provider for proper diagnosis and treatment plan."],
             "diet": ["Balanced diet", "Adequate hydration"],
             "lifestyle": ["Rest", "Monitor symptoms"],
             "references": ["General Medical Guidance"]

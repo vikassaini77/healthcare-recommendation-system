@@ -6,26 +6,30 @@ import numpy as np
 from apps.api.src.services.medical_kb import medical_kb
 from apps.api.src.services.safety_checker import safety_checker
 
-def load_model_and_metadata():
-    model_path = os.path.join(settings.ML_MODELS_DIR, "disease_model.pkl")
-    metadata_path = os.path.join(settings.ML_DATA_PROCESSED_DIR, "metadata.json")
-    
-    model = joblib.load(model_path)
-    with open(metadata_path, 'r') as f:
-        metadata = json.load(f)
-        
-    return model, metadata
+model = None
+metadata = None
 
-model, metadata = load_model_and_metadata()
+def initialize():
+    global model, metadata
+    if model is None or metadata is None:
+        model_path = os.path.join(settings.ML_MODELS_DIR, "disease", "v1.0.0", "disease_model.pkl")
+        metadata_path = os.path.join(settings.ML_DATA_PROCESSED_DIR, "metadata.json")
+        
+        model = joblib.load(model_path)
+        with open(metadata_path, 'r') as f:
+            metadata = json.load(f)
 
 def predict_disease(symptoms_list, patient_profile=None):
-    if len(symptoms_list) < 3:
+    if model is None or metadata is None:
+        initialize()
+        
+    if not symptoms_list:
         return {
             "prediction": "Unknown",
             "confidence": 0.0,
             "top_predictions": [],
             "important_symptoms": [],
-            "description": "Insufficient information for reliable prediction. Please provide at least 3 symptoms.",
+            "description": "No symptoms provided. Please provide symptoms for analysis.",
             "precautions": [],
             "diets": [],
             "medications": [],
@@ -34,8 +38,34 @@ def predict_disease(symptoms_list, patient_profile=None):
         
     all_symptoms = metadata['symptoms']
     
+    # Symptom Normalization (Lowercase and map spaces to underscores)
+    normalized_all = {s.lower().replace(" ", "_"): s for s in all_symptoms}
+    
+    recognized_symptoms = []
+    unrecognized_symptoms = []
+    
+    for sym in symptoms_list:
+        norm_sym = sym.lower().replace(" ", "_").strip()
+        if norm_sym in normalized_all:
+            recognized_symptoms.append(normalized_all[norm_sym])
+        else:
+            unrecognized_symptoms.append(sym)
+            
+    if not recognized_symptoms:
+        return {
+            "prediction": "Indeterminate",
+            "confidence": 0.0,
+            "top_predictions": [],
+            "important_symptoms": [],
+            "description": f"None of the provided symptoms were recognized. Unrecognized: {', '.join(unrecognized_symptoms)}",
+            "precautions": ["Consult a healthcare provider."],
+            "diets": [],
+            "medications": [],
+            "workouts": []
+        }
+    
     # Create binary vector
-    binary_vector = [1 if symptom in symptoms_list else 0 for symptom in all_symptoms]
+    binary_vector = [1 if symptom in recognized_symptoms else 0 for symptom in all_symptoms]
     X = np.array([binary_vector])
     
     # Predict Probabilities
@@ -54,6 +84,13 @@ def predict_disease(symptoms_list, patient_profile=None):
         prediction = model.predict(X)[0]
         confidence = 1.0
         top_predictions = [{"disease": prediction, "probability": 1.0}]
+        
+    # Uncertainty Handling (Thresholding/Abstention)
+    if confidence < 0.35:
+        prediction = "Indeterminate"
+        description = "Prediction confidence is too low to make a safe determination. Please consult a healthcare professional for clinical evaluation."
+    else:
+        description = metadata['descriptions'].get(prediction, "No description available.")
         
     # Explainability: which of the provided symptoms had the highest feature importance?
     important_symptoms = []
@@ -77,19 +114,7 @@ def predict_disease(symptoms_list, patient_profile=None):
         provided_importances.sort(key=lambda x: x[1], reverse=True)
         important_symptoms = [sym for sym, imp in provided_importances[:3] if imp > 0]
         
-    # Get base recommendations
-    description = metadata['descriptions'].get(prediction, "No description available.")
-    
-    if confidence < 0.3:
-        description = "⚠️ Prediction confidence is low. Please consult a healthcare professional. " + description
-    
-    # Optional BMI calculation to augment patient profile
-    if patient_profile and getattr(patient_profile, 'weight', None) and getattr(patient_profile, 'height', None):
-        height_m = patient_profile.height / 100.0
-        bmi = patient_profile.weight / (height_m * height_m)
-        # We can append this to conditions to be passed to the LLM if needed
-        patient_profile.conditions.append(f"BMI: {bmi:.1f}")
-    
+    # BMI is now handled safely by the LLM service or not appended directly to the input object.
     # Fetch structured medical knowledge
     kb_info = medical_kb.get_disease_info(prediction)
     precautions = list(dict.fromkeys(kb_info.get("precautions", []) + metadata['precautions'].get(prediction, [])))
