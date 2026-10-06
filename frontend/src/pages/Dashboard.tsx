@@ -183,7 +183,7 @@ const Dashboard = () => {
           </div>
 
                     {/* Center Column - Analysis */}
-          <div className="space-y-6 lg:col-span-2 hidden">
+          <div className="space-y-6 lg:col-span-2">
             <Card className="p-6 border-border bg-card shadow-sm h-full flex flex-col relative overflow-hidden">
               {/* Subtle background glow effect */}
               <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-primary/5 blur-[80px] pointer-events-none" />
