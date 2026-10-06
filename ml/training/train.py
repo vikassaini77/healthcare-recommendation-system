@@ -74,7 +74,10 @@ def train_and_evaluate():
     model = CalibratedClassifierCV(estimator=RandomForestClassifier(n_estimators=100, random_state=42), method='sigmoid', cv=5)
     model.fit(X_train, y_train) # Fit calibrator on training set (it splits internally)
 
-    # Evaluate on Test Set
+    import mlflow
+    import mlflow.sklearn
+    import datetime
+
     print("Evaluating on Test Set...")
     y_test_pred = model.predict(X_test)
     test_accuracy = accuracy_score(y_test, y_test_pred)
@@ -90,28 +93,86 @@ def train_and_evaluate():
     print(f"Test Accuracy: {test_accuracy * 100:.2f}%")
     print(f"Balanced Accuracy: {bal_acc * 100:.2f}%")
     
-    # Save evaluation metrics
-    os.makedirs(os.path.join(MODEL_DIR, 'disease', 'v1.0.0'), exist_ok=True)
-    report_path = os.path.join(MODEL_DIR, 'disease', 'v1.0.0', 'evaluation_report.txt')
-    with open(report_path, 'w') as f:
-        f.write("=== Disease Prediction Model Evaluation (v1.0.0) ===\n")
-        f.write(f"Deduplicated Rows Removed: {original_len - len(df)}\n")
-        f.write(f"Stratified CV (5-Fold) Accuracy: {cv_scores.mean()*100:.2f}% (+/- {cv_scores.std()*200:.2f}%)\n")
-        f.write(f"Test Accuracy: {test_accuracy * 100:.2f}%\n")
-        f.write(f"Balanced Accuracy: {bal_acc * 100:.2f}%\n")
-        f.write(f"Weighted Precision: {precision * 100:.2f}%\n")
-        f.write(f"Weighted Recall: {recall * 100:.2f}%\n")
-        f.write(f"Weighted F1-Score: {f1 * 100:.2f}%\n")
-        f.write(f"Macro F1-Score: {macro_f1 * 100:.2f}%\n\n")
-        f.write("--- Classification Report ---\n")
-        f.write(report)
-        f.write("\n\n--- Confusion Matrix ---\n")
-        f.write(np.array2string(conf_matrix))
+    # ---------------- MLOps: Experiment Tracking ----------------
+    mlflow.set_experiment("Disease_Prediction_Model")
+    with mlflow.start_run() as run:
+        # 1. Log Hyperparameters & Dataset Info
+        mlflow.log_param("n_estimators", 100)
+        mlflow.log_param("random_state", 42)
+        mlflow.log_param("cv_folds", 5)
+        mlflow.log_param("dataset_size", original_len)
+        mlflow.log_param("deduplicated_size", len(df))
         
-    print(f"Evaluation report saved to {report_path}")
+        # 2. Log Metrics
+        mlflow.log_metric("cv_accuracy_mean", cv_scores.mean())
+        mlflow.log_metric("test_accuracy", test_accuracy)
+        mlflow.log_metric("balanced_accuracy", bal_acc)
+        mlflow.log_metric("weighted_precision", precision)
+        mlflow.log_metric("weighted_recall", recall)
+        mlflow.log_metric("weighted_f1", f1)
+        mlflow.log_metric("macro_f1", macro_f1)
+        
+        # 3. Automated ML Evaluation (Pass/Fail Gate)
+        BASELINE_ACCURACY = 0.85
+        if test_accuracy < BASELINE_ACCURACY:
+            mlflow.log_param("gate_status", "FAILED")
+            print(f"❌ Model failed evaluation gate (Accuracy {test_accuracy:.2f} < {BASELINE_ACCURACY}). Aborting registration.")
+            raise ValueError(f"Model failed quality gate. Accuracy {test_accuracy:.2f} is below baseline {BASELINE_ACCURACY}.")
+        
+        mlflow.log_param("gate_status", "PASSED")
+        print("✅ Model passed evaluation gate.")
+        
+        # 4. Save model to MLflow (and locally for fast API loading)
+        mlflow.sklearn.log_model(model, "model")
+        
+        # 5. Log Git Commit (Mocked for example, normally extracted via gitpython or env vars)
+        commit_hash = os.getenv("GIT_COMMIT", "local-dev")
+        mlflow.log_param("git_commit", commit_hash)
+        
+        # Save evaluation metrics locally as well
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        version = f"v1.0.0_{timestamp}"
+        
+        version_dir = os.path.join(MODEL_DIR, 'disease', version)
+        os.makedirs(version_dir, exist_ok=True)
+        report_path = os.path.join(version_dir, 'evaluation_report.txt')
+        
+        with open(report_path, 'w') as f:
+            f.write(f"=== Disease Prediction Model Evaluation ({version}) ===\n")
+            f.write(f"Deduplicated Rows Removed: {original_len - len(df)}\n")
+            f.write(f"Stratified CV (5-Fold) Accuracy: {cv_scores.mean()*100:.2f}% (+/- {cv_scores.std()*200:.2f}%)\n")
+            f.write(f"Test Accuracy: {test_accuracy * 100:.2f}%\n")
+            f.write(f"Balanced Accuracy: {bal_acc * 100:.2f}%\n")
+            f.write(f"Weighted Precision: {precision * 100:.2f}%\n")
+            f.write(f"Weighted Recall: {recall * 100:.2f}%\n")
+            f.write(f"Weighted F1-Score: {f1 * 100:.2f}%\n")
+            f.write(f"Macro F1-Score: {macro_f1 * 100:.2f}%\n\n")
+            f.write("--- Classification Report ---\n")
+            f.write(report)
+            f.write("\n\n--- Confusion Matrix ---\n")
+            f.write(np.array2string(conf_matrix))
+            
+        print(f"Evaluation report saved to {report_path}")
 
-    # Save model
-    joblib.dump(model, os.path.join(MODEL_DIR, 'disease', 'v1.0.0', 'disease_model.pkl'))
+        # Save model locally for API
+        model_path = os.path.join(version_dir, 'disease_model.pkl')
+        joblib.dump(model, model_path)
+        
+        # Update registry.json
+        registry_path = os.path.join(MODEL_DIR, 'registry.json')
+        registry_data = {"disease_model": {"version": version, "path": model_path}}
+        if os.path.exists(registry_path):
+            try:
+                with open(registry_path, 'r') as f:
+                    registry_data = json.load(f)
+                registry_data["disease_model"] = {"version": version, "path": model_path}
+            except Exception:
+                pass
+                
+        with open(registry_path, 'w') as f:
+            json.dump(registry_data, f, indent=4)
+        
+        print(f"Model registered in registry.json as version {version}")
     
     # Read other metadata logic (kept intact but updating paths)
     desc_df = pd.read_csv(os.path.join(DATA_RAW_DIR, 'symptom_Description.csv'))

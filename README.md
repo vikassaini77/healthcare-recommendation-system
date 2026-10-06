@@ -89,7 +89,7 @@ MedVision AI is a full-stack, multimodal healthcare system that combines:
 
 ## 4. System Architecture <a name="system-architecture"></a>
 
-MedVision AI relies on a Domain-Driven, microservice-ready FAANG-level architecture. The frontend communicates exclusively via RESTful JSON endpoints, while the backend orchestrates calls to internal ML services and external LLMs.
+MedVision AI relies on a Domain-Driven, microservice-ready architecture. The frontend communicates exclusively via RESTful JSON endpoints, while the backend orchestrates calls to internal ML services and external LLMs.
 
 ```mermaid
 graph TD
@@ -273,12 +273,7 @@ The backend provides a fully documented Swagger UI at `http://127.0.0.1:8000/doc
 
 ## 12. Performance Benchmarks <a name="performance-benchmarks"></a>
 
-| Metric | Value | Target Workload |
-| ------ | ----- | --------------- |
-| **Vision Accuracy** | ~92.4% | 14-class Thoracic Conditions |
-| **Vision Inference Latency** | < 120ms | CPU (Intel i7 / Ryzen 5) |
-| **Symptom Engine Latency** | < 15ms | CPU |
-| **LLM Generation** | ~1.5 - 3.0s | Network Dependent (Gemini API) |
+*(Benchmarks for vision inference latency, symptom engine latency, and generative AI synthesis will be published in a future update following standardized load testing and model evaluation).*
 
 ---
 
@@ -292,7 +287,7 @@ The backend provides a fully documented Swagger UI at `http://127.0.0.1:8000/doc
 
 ## 14. Scalability Strategy <a name="scalability-strategy"></a>
 
-- **Stateless Backend**: The FastAPI backend holds zero persistent state, allowing for infinite horizontal scaling behind a standard Load Balancer.
+- **Stateless API Layer**: The FastAPI backend is designed to support horizontal scaling, with a stateless API layer and persistent database-backed state.
 - **Separation of Compute**: Heavy PyTorch inference is decoupled into `ml/inference/`, allowing future integration with Celery/Redis queues or dedicated GPU-accelerated worker nodes for asynchronous processing.
 - **Client-Side Caching**: The React frontend utilizes optimized context providers (`MedicalDataContext`) to cache heavy LLM and image Base64 results locally, minimizing redundant API calls.
 
@@ -300,43 +295,57 @@ The backend provides a fully documented Swagger UI at `http://127.0.0.1:8000/doc
 
 ## 15. Deployment <a name="deployment"></a>
 
-MedVision AI is Docker-ready.
+MedVision AI is Docker-ready and designed for a decoupled microservice deployment strategy.
 
-**Deploying to AWS Elastic Beanstalk / Azure App Service:**
-1. Containerize the FastAPI backend via a standard `Dockerfile` (uvicorn layer).
-2. Containerize the Vite frontend using an Nginx alpine image.
-3. Configure `VITE_API_BASE_URL` in the frontend container to point to the backend's internal cloud DNS.
-4. Scale via Kubernetes or standard auto-scaling groups.
+**Recommended Production Architecture:**
+- **Frontend**: Vercel or AWS Amplify (Static Site Hosting)
+- **Backend & ML Models**: AWS ECS, Render, or Google Cloud Run (Containerized FastAPI)
+- **Database**: Managed PostgreSQL (e.g., AWS RDS or Supabase)
+- **LLM Engine**: Google Gemini API
+
+**Docker Deployment:**
+To run locally or deploy to a self-managed server, use the updated Docker Compose configuration located in `infrastructure/docker/docker-compose.yml`:
+```bash
+cd infrastructure/docker
+docker-compose up --build -d
+```
 
 ---
 
 ## 16. CI/CD Pipeline <a name="cicd-pipeline"></a>
-*(Currently manual, planned for GitHub Actions integration in v1.2)*
-```mermaid
-graph LR
-    A[Commit to Main] --> B[GitHub Actions]
-    B --> C[Run PyTest]
-    C --> D[Docker Build]
-    D --> E[Deploy to AWS ECS]
-```
+The project utilizes **GitHub Actions** for continuous integration. The pipeline (`.github/workflows/ci.yml`) automatically triggers on push to `main`:
+1. **Linting**: Enforces code quality (`flake8`).
+2. **Automated Testing**: Executes the `pytest` suite for backend and ML tests.
+3. **Frontend Build**: Verifies that the Vite React application compiles without errors.
+4. **Docker Build Validation**: Ensures both frontend and backend Dockerfiles successfully construct images.
+5. **Security Scanning**: Analyzes Python dependencies for vulnerabilities using `safety`.
 
 ---
 
 ## 17. Monitoring & Logging <a name="monitoring--logging"></a>
-*(Planned)*
-- **Prometheus** for FastAPI metrics (request latency, memory usage).
-- **Grafana** for visual dashboards.
-- **ELK Stack** (Elasticsearch, Logstash, Kibana) for centralized error logging from LLM failures.
+- **Metrics**: The FastAPI backend is fully instrumented with Prometheus (`prometheus-fastapi-instrumentator`). Metrics are exposed dynamically at `/metrics` for scraping by Prometheus.
+- **Logging**: Implemented structured JSON logging using `loguru` to capture request IDs and exceptions globally. This integrates seamlessly into the ELK stack.
+- **Load Testing**: A Locust test script is available in `apps/api/tests/load/locustfile.py` to simulate concurrent API load and inference latency.
 
 ---
 
 ## 18. Testing <a name="testing"></a>
-*(In Development)*
-Run API unit tests locally using PyTest:
+An extensive automated testing suite is built with `pytest`:
+- **Unit & API Tests**: Located in `apps/api/tests/`. Tests endpoints and database schemas.
+- **Safety Checker Tests**: Dedicated tests in `apps/api/tests/safety/test_safety_checker.py` strictly validate drug-drug interactions (Critical/Warning), allergy detections, and edge-cases to ensure patient safety logic remains intact.
+
+Run tests via:
 ```bash
 cd apps/api
 pytest tests/
 ```
+
+---
+
+## 19. Model Lifecycle Management <a name="mlops"></a>
+- **Experiment Tracking**: Training scripts (`ml/training/train.py`) use **MLflow** to track hyperparameters, CV scores, validation metrics, and dataset properties.
+- **Automated ML Evaluation Gate**: During training, the pipeline enforces a quality gate. If the `test_accuracy` falls below the baseline threshold, the model is rejected and not registered.
+- **Git LFS**: Deep learning weights (`*.pth`) and serialized ML models (`*.pkl`) are managed exclusively through Git Large File Storage (LFS) via `.gitattributes` to keep the main repository lightweight and version history clean.
 
 ---
 
@@ -409,7 +418,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 - **Problem Solved**: Reduces diagnostic bottlenecks in triage environments by providing instant multimodal insights.
 - **Automation Benefits**: Replaces manual chart analysis with instantaneous Generative AI summaries.
-- **Production Readiness**: Engineered with a scalable, modular architecture guaranteeing high uptime and easy maintainability for enterprise engineering teams.
+- **Production Architecture**: Engineered with a scalable, modular architecture designed for high availability and easy maintainability for engineering teams.
 
 ---
 
@@ -423,4 +432,4 @@ When deploying MedVision AI to production, a comprehensive Disaster Recovery (DR
 
 ## 27. Executive Summary <a name="executive-summary"></a>
 
-**MedVision AI** represents the pinnacle of modern applied AI in healthcare. By meticulously combining state-of-the-art Deep Learning (DenseNet121) for radiology, classical Machine Learning for symptom triage, and Generative AI (Gemini) for clinical summarization, the system serves as a powerful co-pilot for healthcare professionals. Built on a FAANG-standard architecture, MedVision AI is highly scalable, incredibly fast, and ready to be deployed into enterprise healthcare environments to fundamentally improve patient care and diagnostic accuracy.
+**MedVision AI** is an educational and research-oriented system exploring modern applied AI in healthcare. By combining Deep Learning (DenseNet121) for radiology, classical Machine Learning for symptom triage, and Generative AI (Gemini) for clinical summarization, the system serves as an experimental co-pilot for healthcare workflows. Built on a domain-driven architecture, MedVision AI is highly scalable, fast, and designed to demonstrate how AI can be deployed to augment patient care and diagnostic processes.

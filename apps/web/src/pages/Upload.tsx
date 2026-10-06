@@ -138,13 +138,25 @@ const Upload = () => {
     formData.append("file", file);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || ""}/api/v1/predict_xray`, {
+      const baseUrl = (import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1").replace(/\/$/, "");
+      const response = await fetch(`${baseUrl}/predict_xray`, {
         method: "POST",
         headers: {
           "bypass-tunnel-reminder": "true"
         },
         body: formData,
       });
+      
+      if (!response.ok) {
+        if (response.status === 429) {
+          throw new Error("You are making too many requests. Please slow down and try again.");
+        } else if (response.status === 401 || response.status === 403) {
+          throw new Error("Authentication error. Please login again.");
+        } else {
+          throw new Error(`Server Error (${response.status}). Please try again later.`);
+        }
+      }
+      
       const data = await response.json();
       
       const realResult = {
@@ -169,9 +181,17 @@ const Upload = () => {
         gradcamData: `data:image/png;base64,${data.gradcam}`
       });
       toast.success("Analysis complete!");
-    } catch (error) {
-      toast.error("Failed to analyze image");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to analyze image");
       setState("error");
+      
+      // Update global context so it doesn't stay stuck on 'analyzing'
+      if (currentScanId) {
+        updateScan(newScan.id, {
+            status: "error",
+            prediction: "Analysis Failed"
+        });
+      }
       return;
     }
   };

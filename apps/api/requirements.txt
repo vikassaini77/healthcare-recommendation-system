@@ -25,3 +25,5 @@ pillow
 matplotlib
 google-generativeai
 gradio
+mlflow
+prometheus-fastapi-instrumentator

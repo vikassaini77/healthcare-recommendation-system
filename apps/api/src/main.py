@@ -56,10 +56,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from prometheus_fastapi_instrumentator import Instrumentator
+
 app.include_router(api_router, prefix=settings.API_V1_STR)
 app.include_router(auth_router, prefix=f"{settings.API_V1_STR}/auth")
 app.include_router(patients_router, prefix=f"{settings.API_V1_STR}/patients")
 app.include_router(history_router, prefix=f"{settings.API_V1_STR}/history")
+
+# Initialize Prometheus Instrumentator
+Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 
 @app.get("/")
 def root():
