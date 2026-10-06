@@ -33,68 +33,42 @@ def predict_disease(symptoms_list, patient_profile=None):
     medications = metadata['medications'].get(prediction, [])
     workouts = metadata['workouts'].get(prediction, [])
 
-    # Rule-Based Filtering & Candidate Generation (Proper ML Engineering approach)
-    if patient_profile and len(medications) > 0:
-        try:
-            age = patient_profile.age
-            weight = patient_profile.weight
-            condition = patient_profile.conditions[0].lower() if len(patient_profile.conditions) > 0 else "none"
-
-            filtered_medications = []
-            
-            for drug in medications:
-                drug_lower = drug.lower()
-                is_safe = True
-                
-                # Rule 1: Contraindications for Diabetes
-                if "diabetes" in condition and ("syrup" in drug_lower or "sugar" in drug_lower):
-                    is_safe = False
-                
-                # Rule 2: Contraindications for Hypertension
-                if "hypertension" in condition and ("sodium" in drug_lower or "stimulant" in drug_lower):
-                    is_safe = False
-                    
-                # Rule 3: Age-based filtering
-                if age > 65 and "strong" in drug_lower:
-                    is_safe = False
-                    
-                # Rule 4: Weight-based dosing (Mock logic)
-                if weight < 40 and "heavy" in drug_lower:
-                    is_safe = False
-
-                if is_safe:
-                    filtered_medications.append(drug)
-                    
-            if not filtered_medications:
-                filtered_medications = ["Consult a doctor for safe alternative medications."]
-                
-            # Highlight the top candidate
-            best_drug = filtered_medications[0]
-            medications = [f"⭐ {best_drug} (Recommended based on your profile)"] + filtered_medications[1:]
-
-        except Exception as e:
-            print("Filtering Error:", e)
-            pass
-
-    # AI Personalization Override
+    # Real AI Recommendation Engine
     if patient_profile and settings.GEMINI_API_KEY:
         try:
             import google.generativeai as genai
+            import json
             genai.configure(api_key=settings.GEMINI_API_KEY)
             llm = genai.GenerativeModel("gemini-3.6-flash")
             
             prompt = (
                 f"You are an AI doctor. Patient Profile: Name={getattr(patient_profile, 'name', 'Patient')}, "
                 f"Age={patient_profile.age}, Gender={patient_profile.gender}, Weight={patient_profile.weight}kg, "
-                f"Height={getattr(patient_profile, 'height', 170)}cm, Pre-existing Conditions={', '.join(patient_profile.conditions)}.\n"
+                f"Height={getattr(patient_profile, 'height', 170)}cm, Pre-existing Conditions={', '.join(patient_profile.conditions)}, "
+                f"Allergies={', '.join(patient_profile.allergies)}, Pregnancy Status={patient_profile.pregnancy_status}, "
+                f"Current Medications={', '.join(patient_profile.current_medications)}, Disease Severity={patient_profile.disease_severity}.\n"
                 f"Symptoms: {', '.join(symptoms_list)}.\n"
                 f"Our ML model predicts: {prediction}.\n\n"
-                "Write a highly personalized, empathetic 3-sentence summary and recommendation tailored EXACTLY "
-                "to their age, gender, height, weight, and specific symptoms. DO NOT just give generic advice."
+                "Act as a recommendation engine. Do the following:\n"
+                "1. Analyze candidate medicines for the predicted disease.\n"
+                "2. Perform patient safety checks (drug interactions, contraindications, allergies, pregnancy, age/weight dosage constraints).\n"
+                "3. Personalize and rank the top safe medications.\n"
+                "Output your response strictly as a JSON object with two keys:\n"
+                "- 'summary': A highly personalized, empathetic 3-sentence summary.\n"
+                "- 'medications': A list of strings, where each string is a recommended medication with a brief explanation of why it was chosen and safety notes (e.g. '⭐ Ibuprofen 200mg (Safe for your age/weight, no interaction with your current meds)').\n"
+                "Return ONLY valid JSON. Do NOT include markdown formatting like ```json or any other text outside the JSON block."
             )
             res = llm.generate_content(prompt)
             if res.text:
-                description = f"🤖 AI Personalized Analysis: {res.text.strip()}"
+                try:
+                    response_json = json.loads(res.text.strip())
+                    if "summary" in response_json:
+                        description = f"🤖 AI Personalized Analysis: {response_json['summary']}"
+                    if "medications" in response_json:
+                        medications = response_json['medications']
+                except json.JSONDecodeError:
+                    # Fallback if the model didn't return perfect JSON
+                    description = f"🤖 AI Personalized Analysis: {res.text.strip()}"
         except Exception as e:
             print("Gemini Personalization Error:", e)
             pass

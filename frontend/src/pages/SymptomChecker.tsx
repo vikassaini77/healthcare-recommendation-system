@@ -26,6 +26,10 @@ const Dashboard = () => {
   const [weight, setWeight] = useState<number | "">("");
   const [height, setHeight] = useState<number | "">("");
   const [conditions, setConditions] = useState("");
+  const [allergies, setAllergies] = useState("");
+  const [pregnancyStatus, setPregnancyStatus] = useState("Not Applicable");
+  const [currentMedications, setCurrentMedications] = useState("");
+  const [diseaseSeverity, setDiseaseSeverity] = useState("Moderate");
 
   useEffect(() => {
     const baseUrl = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
@@ -53,7 +57,11 @@ const Dashboard = () => {
       gender: gender,
       weight: Number(weight),
       height: Number(height),
-      conditions: conditions.split(",").map(c => c.trim()).filter(c => c.length > 0)
+      conditions: conditions.split(",").map(c => c.trim()).filter(c => c.length > 0),
+      allergies: allergies.split(",").map(c => c.trim()).filter(c => c.length > 0),
+      pregnancy_status: pregnancyStatus !== "Not Applicable" ? pregnancyStatus : null,
+      current_medications: currentMedications.split(",").map(c => c.trim()).filter(c => c.length > 0),
+      disease_severity: diseaseSeverity
     };
 
     try {
@@ -163,6 +171,50 @@ const Dashboard = () => {
                     onChange={(e) => setConditions(e.target.value)}
                     required
                   />
+                </div>
+                <div className="col-span-2">
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Allergies</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Penicillin, Peanuts (comma separated)"
+                    className="w-full p-2 bg-background border border-border rounded-md text-sm"
+                    value={allergies}
+                    onChange={(e) => setAllergies(e.target.value)}
+                  />
+                </div>
+                <div className="col-span-2">
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Current Medications</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Lisinopril 10mg (comma separated)"
+                    className="w-full p-2 bg-background border border-border rounded-md text-sm"
+                    value={currentMedications}
+                    onChange={(e) => setCurrentMedications(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Pregnancy Status</label>
+                  <select 
+                    className="w-full p-2 bg-background border border-border rounded-md text-sm"
+                    value={pregnancyStatus}
+                    onChange={(e) => setPregnancyStatus(e.target.value)}
+                  >
+                    <option>Not Applicable</option>
+                    <option>Pregnant</option>
+                    <option>Nursing</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Disease Severity</label>
+                  <select 
+                    className="w-full p-2 bg-background border border-border rounded-md text-sm"
+                    value={diseaseSeverity}
+                    onChange={(e) => setDiseaseSeverity(e.target.value)}
+                  >
+                    <option>Mild</option>
+                    <option>Moderate</option>
+                    <option>Severe</option>
+                  </select>
                 </div>
               </div>
             </Card>

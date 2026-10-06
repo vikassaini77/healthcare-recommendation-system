@@ -8,6 +8,10 @@ class PatientProfile(BaseModel):
     weight: float
     height: float
     conditions: List[str]
+    allergies: List[str] = []
+    pregnancy_status: Optional[str] = None
+    current_medications: List[str] = []
+    disease_severity: str = "Moderate"
 
 class PredictionRequest(BaseModel):
     symptoms: List[str]

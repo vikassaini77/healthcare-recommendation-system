@@ -43,7 +43,12 @@ const AdvancedDiagnosis = () => {
   const [age, setAge] = useState<number | "">("");
   const [gender, setGender] = useState("Male");
   const [weight, setWeight] = useState<number | "">("");
+  const [height, setHeight] = useState<number | "">("");
   const [conditions, setConditions] = useState("");
+  const [allergies, setAllergies] = useState("");
+  const [pregnancyStatus, setPregnancyStatus] = useState("Not Applicable");
+  const [currentMedications, setCurrentMedications] = useState("");
+  const [diseaseSeverity, setDiseaseSeverity] = useState("Moderate");
 
   // Global States
   const [result, setResult] = useState<HolisticResult | null>(null);
@@ -84,11 +89,16 @@ const AdvancedDiagnosis = () => {
     }
     setLoading(true);
     
-    const profile = (age && weight) ? {
+    const profile = (age && weight && height) ? {
       age: Number(age),
       gender: gender,
       weight: Number(weight),
-      conditions: conditions.split(",").map(c => c.trim()).filter(c => c.length > 0)
+      height: Number(height),
+      conditions: conditions.split(",").map(c => c.trim()).filter(c => c.length > 0),
+      allergies: allergies.split(",").map(c => c.trim()).filter(c => c.length > 0),
+      pregnancy_status: pregnancyStatus !== "Not Applicable" ? pregnancyStatus : null,
+      current_medications: currentMedications.split(",").map(c => c.trim()).filter(c => c.length > 0),
+      disease_severity: diseaseSeverity
     } : null;
 
     const formData = new FormData();
@@ -198,8 +208,32 @@ const AdvancedDiagnosis = () => {
                   <input type="number" placeholder="e.g. 70" className="w-full p-2 bg-background border border-border rounded-md text-sm" value={weight} onChange={(e) => setWeight(e.target.value ? Number(e.target.value) : "")} />
                 </div>
                 <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Height (cm)</label>
+                  <input type="number" placeholder="e.g. 175" className="w-full p-2 bg-background border border-border rounded-md text-sm" value={height} onChange={(e) => setHeight(e.target.value ? Number(e.target.value) : "")} />
+                </div>
+                <div>
                   <label className="text-xs font-medium text-muted-foreground mb-1 block">Conditions</label>
                   <input type="text" placeholder="e.g. Diabetes" className="w-full p-2 bg-background border border-border rounded-md text-sm" value={conditions} onChange={(e) => setConditions(e.target.value)} />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Allergies</label>
+                  <input type="text" placeholder="e.g. Peanuts" className="w-full p-2 bg-background border border-border rounded-md text-sm" value={allergies} onChange={(e) => setAllergies(e.target.value)} />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Current Meds</label>
+                  <input type="text" placeholder="e.g. Lisinopril" className="w-full p-2 bg-background border border-border rounded-md text-sm" value={currentMedications} onChange={(e) => setCurrentMedications(e.target.value)} />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Pregnancy Status</label>
+                  <select className="w-full p-2 bg-background border border-border rounded-md text-sm" value={pregnancyStatus} onChange={(e) => setPregnancyStatus(e.target.value)}>
+                    <option>Not Applicable</option><option>Pregnant</option><option>Nursing</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Disease Severity</label>
+                  <select className="w-full p-2 bg-background border border-border rounded-md text-sm" value={diseaseSeverity} onChange={(e) => setDiseaseSeverity(e.target.value)}>
+                    <option>Mild</option><option>Moderate</option><option>Severe</option>
+                  </select>
                 </div>
               </div>
             </Card>
