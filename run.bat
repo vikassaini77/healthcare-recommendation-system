@@ -4,10 +4,10 @@ echo Starting Healthcare Recommendation System
 echo ====================================================
 
 echo [1/2] Starting Backend Server (FastAPI)...
-start "Backend (FastAPI)" cmd /k "cd backend && python -m uvicorn src.main:app --host 127.0.0.1 --port 8000 --reload"
+start "Backend (FastAPI)" cmd /k "set PYTHONPATH=. && python -m uvicorn apps.api.src.main:app --host 127.0.0.1 --port 8000 --reload"
 
 echo [2/2] Starting Frontend App (React/Vite)...
-start "Frontend (React)" cmd /k "cd frontend && npm run dev"
+start "Frontend (React)" cmd /k "cd apps\web && npm run dev"
 
 echo.
 echo Both services are starting in separate windows!

@@ -1,0 +1,66 @@
+=== Disease Prediction Model Evaluation ===
+Duplicate Rows in Dataset: 4616
+Stratified CV (5-Fold) Accuracy: 100.00% (+/- 0.00%)
+Test Accuracy: 100.00%
+Weighted Precision: 100.00%
+Weighted Recall: 100.00%
+Weighted F1-Score: 100.00%
+
+--- Classification Report ---
+                                         precision    recall  f1-score   support
+
+(vertigo) Paroymsal  Positional Vertigo       1.00      1.00      1.00        18
+                                   AIDS       1.00      1.00      1.00        18
+                                   Acne       1.00      1.00      1.00        18
+                    Alcoholic hepatitis       1.00      1.00      1.00        18
+                                Allergy       1.00      1.00      1.00        18
+                              Arthritis       1.00      1.00      1.00        18
+                       Bronchial Asthma       1.00      1.00      1.00        18
+                   Cervical spondylosis       1.00      1.00      1.00        18
+                            Chicken pox       1.00      1.00      1.00        18
+                    Chronic cholestasis       1.00      1.00      1.00        18
+                            Common Cold       1.00      1.00      1.00        18
+                                 Dengue       1.00      1.00      1.00        18
+                               Diabetes       1.00      1.00      1.00        18
+           Dimorphic hemmorhoids(piles)       1.00      1.00      1.00        18
+                          Drug Reaction       1.00      1.00      1.00        18
+                       Fungal infection       1.00      1.00      1.00        18
+                                   GERD       1.00      1.00      1.00        18
+                        Gastroenteritis       1.00      1.00      1.00        18
+                           Heart attack       1.00      1.00      1.00        18
+                            Hepatitis B       1.00      1.00      1.00        18
+                            Hepatitis C       1.00      1.00      1.00        18
+                            Hepatitis D       1.00      1.00      1.00        18
+                            Hepatitis E       1.00      1.00      1.00        18
+                           Hypertension       1.00      1.00      1.00        18
+                        Hyperthyroidism       1.00      1.00      1.00        18
+                           Hypoglycemia       1.00      1.00      1.00        18
+                         Hypothyroidism       1.00      1.00      1.00        18
+                               Impetigo       1.00      1.00      1.00        18
+                               Jaundice       1.00      1.00      1.00        18
+                                Malaria       1.00      1.00      1.00        18
+                               Migraine       1.00      1.00      1.00        18
+                        Osteoarthristis       1.00      1.00      1.00        18
+           Paralysis (brain hemorrhage)       1.00      1.00      1.00        18
+                    Peptic ulcer diseae       1.00      1.00      1.00        18
+                              Pneumonia       1.00      1.00      1.00        18
+                              Psoriasis       1.00      1.00      1.00        18
+                           Tuberculosis       1.00      1.00      1.00        18
+                                Typhoid       1.00      1.00      1.00        18
+                Urinary tract infection       1.00      1.00      1.00        18
+                         Varicose veins       1.00      1.00      1.00        18
+                            hepatitis A       1.00      1.00      1.00        18
+
+                               accuracy                           1.00       738
+                              macro avg       1.00      1.00      1.00       738
+                           weighted avg       1.00      1.00      1.00       738
+
+
+--- Confusion Matrix ---
+[[18  0  0 ...  0  0  0]
+ [ 0 18  0 ...  0  0  0]
+ [ 0  0 18 ...  0  0  0]
+ ...
+ [ 0  0  0 ... 18  0  0]
+ [ 0  0  0 ...  0 18  0]
+ [ 0  0  0 ...  0  0 18]]
