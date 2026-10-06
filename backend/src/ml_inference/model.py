@@ -3,6 +3,8 @@ import joblib
 import json
 from src.core.config import settings
 import numpy as np
+from src.services.medical_kb import medical_kb
+from src.services.safety_checker import safety_checker
 
 def load_model_and_metadata():
     model_path = os.path.join(settings.ML_MODELS_DIR, "disease_model.pkl")
@@ -28,47 +30,63 @@ def predict_disease(symptoms_list, patient_profile=None):
     
     # Get recommendations
     description = metadata['descriptions'].get(prediction, "No description available.")
-    precautions = metadata['precautions'].get(prediction, [])
-    diets = metadata['diets'].get(prediction, [])
-    medications = metadata['medications'].get(prediction, [])
-    workouts = metadata['workouts'].get(prediction, [])
+    
+    # Fetch structured medical knowledge
+    kb_info = medical_kb.get_disease_info(prediction)
+    precautions = list(dict.fromkeys(kb_info.get("precautions", []) + metadata['precautions'].get(prediction, [])))
+    diets = list(dict.fromkeys(kb_info.get("diet", []) + metadata['diets'].get(prediction, [])))
+    workouts = list(dict.fromkeys(kb_info.get("lifestyle", []) + metadata['workouts'].get(prediction, [])))
+    
+    candidate_medications = kb_info.get("medicines", [])
+    references = kb_info.get("references", ["General Medical Guidance"])
+    
+    # Strict Patient Safety Layer
+    patient_allergies = getattr(patient_profile, 'allergies', []) if patient_profile else []
+    current_meds = getattr(patient_profile, 'current_medications', []) if patient_profile else []
+    
+    safe_meds, allergy_rejections = safety_checker.check_allergies(candidate_medications, patient_allergies)
+    safe_meds, interaction_warnings, interaction_rejections = safety_checker.check_interactions(safe_meds, current_meds)
+    
+    # Format final recommendations with evidence and safety notes
+    final_medications = []
+    
+    for med in safe_meds:
+        med_entry = f"✅ {med.title()} (Source: {', '.join(references)})"
+        for w in interaction_warnings:
+            if w["medication"] == med:
+                med_entry += f" - {w['warning']}"
+        final_medications.append(med_entry)
+        
+    for r in allergy_rejections:
+        final_medications.append(f"❌ {r['medication'].title()} (REJECTED: {r['reason']})")
+        
+    for r in interaction_rejections:
+        final_medications.append(f"❌ {r['medication'].title()} (REJECTED: {r['reason']})")
 
-    # Real AI Recommendation Engine
+    if not final_medications:
+        final_medications = ["Consult a doctor for safe alternative medications."]
+        
+    medications = final_medications
+
+    # Real AI Recommendation Engine (Personalization Summary Only)
     if patient_profile and settings.GEMINI_API_KEY:
         try:
             import google.generativeai as genai
-            import json
             genai.configure(api_key=settings.GEMINI_API_KEY)
             llm = genai.GenerativeModel("gemini-3.6-flash")
             
             prompt = (
                 f"You are an AI doctor. Patient Profile: Name={getattr(patient_profile, 'name', 'Patient')}, "
                 f"Age={patient_profile.age}, Gender={patient_profile.gender}, Weight={patient_profile.weight}kg, "
-                f"Height={getattr(patient_profile, 'height', 170)}cm, Pre-existing Conditions={', '.join(patient_profile.conditions)}, "
-                f"Allergies={', '.join(patient_profile.allergies)}, Pregnancy Status={patient_profile.pregnancy_status}, "
-                f"Current Medications={', '.join(patient_profile.current_medications)}, Disease Severity={patient_profile.disease_severity}.\n"
+                f"Height={getattr(patient_profile, 'height', 170)}cm, Pre-existing Conditions={', '.join(patient_profile.conditions)}.\n"
                 f"Symptoms: {', '.join(symptoms_list)}.\n"
                 f"Our ML model predicts: {prediction}.\n\n"
-                "Act as a recommendation engine. Do the following:\n"
-                "1. Analyze candidate medicines for the predicted disease.\n"
-                "2. Perform patient safety checks (drug interactions, contraindications, allergies, pregnancy, age/weight dosage constraints).\n"
-                "3. Personalize and rank the top safe medications.\n"
-                "Output your response strictly as a JSON object with two keys:\n"
-                "- 'summary': A highly personalized, empathetic 3-sentence summary.\n"
-                "- 'medications': A list of strings, where each string is a recommended medication with a brief explanation of why it was chosen and safety notes (e.g. '⭐ Ibuprofen 200mg (Safe for your age/weight, no interaction with your current meds)').\n"
-                "Return ONLY valid JSON. Do NOT include markdown formatting like ```json or any other text outside the JSON block."
+                "Write a highly personalized, empathetic 3-sentence summary tailored EXACTLY "
+                "to their profile and specific symptoms. DO NOT list medications, just provide the summary paragraph."
             )
             res = llm.generate_content(prompt)
             if res.text:
-                try:
-                    response_json = json.loads(res.text.strip())
-                    if "summary" in response_json:
-                        description = f"🤖 AI Personalized Analysis: {response_json['summary']}"
-                    if "medications" in response_json:
-                        medications = response_json['medications']
-                except json.JSONDecodeError:
-                    # Fallback if the model didn't return perfect JSON
-                    description = f"🤖 AI Personalized Analysis: {res.text.strip()}"
+                description = f"🤖 AI Personalized Analysis: {res.text.strip()}"
         except Exception as e:
             print("Gemini Personalization Error:", e)
             pass
