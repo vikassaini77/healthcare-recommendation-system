@@ -24,6 +24,34 @@ def generate_holistic_summary(symptom_prediction: str, patient_profile: dict, xr
         print("Gemini API Error:", e)
         return _fallback_summary(symptom_prediction, xray_prediction, xray_confidence)
 
+def generate_personalized_symptom_summary(symptoms_list: list, prediction: str, patient_profile=None) -> str:
+    api_key = settings.GEMINI_API_KEY
+    if not api_key:
+        return ""
+        
+    try:
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel("gemini-3.6-flash")
+        
+        prompt = "You are an AI healthcare information assistant. "
+        if patient_profile:
+            prompt += (
+                f"Patient Profile: Name={getattr(patient_profile, 'name', 'Patient')}, "
+                f"Age={patient_profile.age}, Gender={patient_profile.gender}, Weight={patient_profile.weight}kg, "
+                f"Height={getattr(patient_profile, 'height', 170)}cm, Pre-existing Conditions={', '.join(patient_profile.conditions)}.\n"
+            )
+        prompt += (
+            f"Symptoms: {', '.join(symptoms_list)}.\n"
+            f"Our ML model predicts a possible match for: {prediction}.\n\n"
+            "Write a highly personalized, empathetic 3-sentence summary tailored EXACTLY "
+            "to their profile and specific symptoms. DO NOT list medications, and explicitly remind them to consult a doctor."
+        )
+        res = model.generate_content(prompt)
+        return res.text.strip() if res.text else ""
+    except Exception as e:
+        print("Gemini Personalization Error:", e)
+        return ""
+
 def generate_chat_response(messages: list) -> str:
     api_key = settings.GEMINI_API_KEY
     if not api_key:

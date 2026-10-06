@@ -6,10 +6,12 @@ from sqlalchemy.orm import Session
 from database.session import get_db
 from database.schemas.models import User
 
+from src.core.config import settings
+
 # This will tell FastAPI to look for a bearer token in the Authorization header
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login")
 
-SECRET_KEY = os.getenv("JWT_SECRET", "super-secret-key-change-in-production")
+SECRET_KEY = settings.JWT_SECRET
 ALGORITHM = "HS256"
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):

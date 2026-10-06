@@ -21,6 +21,10 @@ os.makedirs(MODEL_DIR, exist_ok=True)
 def train_and_evaluate():
     print("Loading datasets...")
     df = pd.read_csv(os.path.join(DATA_RAW_DIR, 'dataset.csv'))
+    # Deduplicate before processing to prevent train/test leakage
+    original_len = len(df)
+    df = df.drop_duplicates()
+    print(f"Removed {original_len - len(df)} exact duplicate rows out of {original_len} total rows.")
     
     # Process symptoms
     symptoms = set()
@@ -48,13 +52,6 @@ def train_and_evaluate():
 
     X = np.array(X_data)
     y = np.array(y_data)
-
-    # Duplicate analysis
-    duplicates = df.duplicated().sum()
-    print(f"Dataset contains {duplicates} exact duplicate rows out of {len(df)} total rows.")
-    if duplicates > 0:
-        print("Note: In medical symptom datasets (like this one), many duplicate rows occur naturally because different patients can present the exact same subset of discrete symptoms. We will retain them for training but it highlights why a pure 100% accuracy might indicate over-representation of certain exact symptom combinations.")
-
     print("Splitting dataset into Train (70%), Validation (15%), Test (15%) with Stratification...")
     X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, random_state=42, stratify=y)
     X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42, stratify=y_temp)

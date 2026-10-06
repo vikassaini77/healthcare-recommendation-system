@@ -14,8 +14,10 @@ def verify_password(password: str, hashed: str) -> bool:
     except ValueError:
         return False
 
+from .config import settings
+
 def create_access_token(data: dict):
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(hours=12)
     to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, os.getenv("JWT_SECRET", "super_secret_key_123"), algorithm="HS256")
+    return jwt.encode(to_encode, settings.JWT_SECRET, algorithm="HS256")

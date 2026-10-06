@@ -17,8 +17,11 @@ class Settings(BaseSettings):
 
     # API Keys
     GEMINI_API_KEY: str = os.environ.get("GEMINI_API_KEY", "")
+    
+    # Security
+    JWT_SECRET: str
 
     # CORS
-    BACKEND_CORS_ORIGINS: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173", "*"]
+    BACKEND_CORS_ORIGINS: list[str] = ["http://localhost:5173", "http://localhost:8080", "http://127.0.0.1:5173", "http://127.0.0.1:8080"]
 
 settings = Settings()

@@ -120,23 +120,26 @@ Structured for massive scalability and rapid developer onboarding.
 ```bash
 healthcare-recommendation-system/
 │
-├── backend/               # FastAPI Application Layer
-│   ├── src/
-│   │   ├── api/           # RESTful API Endpoints (routes.py)
-│   │   ├── core/          # Configuration & Dependency Injection
-│   │   ├── domain/        # Pydantic Schemas & DTOs
-│   │   ├── services/      # External Integrations (LLM, Auth)
-│   │   └── ml_inference/  # ML model wrappers (Grad-CAM, PyTorch)
+├── apps/
+│   ├── api/               # FastAPI Application Layer (Backend)
+│   │   ├── src/
+│   │   │   ├── api/           # RESTful API Endpoints (routes.py)
+│   │   │   ├── core/          # Configuration & Dependency Injection
+│   │   │   └── domain/        # Pydantic Schemas & DTOs
+│   │
+│   └── web/               # React / Vite Client (Frontend)
+│       ├── src/
+│       │   ├── components/    # Reusable Shadcn UI & Layouts
+│       │   ├── contexts/      # React Context (Patient Data)
+│       │   └── pages/         # Application Views (Upload, Reports)
 │
-├── frontend/              # React / Vite Client
-│   ├── src/
-│   │   ├── components/    # Reusable Shadcn UI & Layouts
-│   │   ├── contexts/      # React Context (Patient Data)
-│   │   └── pages/         # Application Views (Upload, Reports)
+├── packages/
+│   └── ai/                # Shared LLM Services and Prompts
 │
 ├── ml/                    # Machine Learning Lifecycle
 │   ├── data/              # Raw CSVs and Processed JSON Metadata
 │   ├── models/            # Serialized Weights (.pkl, .pth)
+│   ├── inference/         # ML model wrappers (Grad-CAM, PyTorch)
 │   └── training/          # Training and Evaluation Scripts
 │
 └── docs/                  # Architecture & Developer Guides
@@ -173,19 +176,19 @@ cd healthcare-recommendation-system
 
 ### Step 2: Install Backend Dependencies
 ```bash
-cd backend
+cd apps/api
 python -m venv venv
 # Windows: venv\Scripts\activate
 # Mac/Linux: source venv/bin/activate
 pip install -r requirements.txt
-cd ..
+cd ../..
 ```
 
 ### Step 3: Install Frontend Dependencies
 ```bash
-cd frontend
+cd apps/web
 npm install
-cd ..
+cd ../..
 ```
 
 ### Step 4: Run the Application
@@ -196,17 +199,17 @@ For Windows users, we provide an automated boot script:
 Alternatively, start the servers manually:
 ```bash
 # Terminal 1 (Backend)
-cd backend && uvicorn src.main:app --host 127.0.0.1 --port 8000 --reload
+cd apps/api && uvicorn src.main:app --host 127.0.0.1 --port 8000 --reload
 
 # Terminal 2 (Frontend)
-cd frontend && npm run dev
+cd apps/web && npm run dev
 ```
 
 ---
 
 ## 8. Environment Configuration <a name="environment-configuration"></a>
 
-Create a `.env` file inside the `backend/` directory.
+Create a `.env` file inside the `apps/api/` directory.
 
 ```env
 # Required for holistic Generative AI summaries
@@ -257,9 +260,9 @@ The backend provides a fully documented Swagger UI at `http://127.0.0.1:8000/doc
 ## 11. AI/ML Section <a name="aiml-section"></a>
 
 ### Computer Vision Pipeline (DenseNet121)
-- **Architecture**: Deep Residual Network (50 layers) initialized with ImageNet weights, fine-tuned on Chest X-Ray datasets.
+- **Architecture**: DenseNet121 (Densely Connected Convolutional Networks) initialized with ImageNet weights, fine-tuned on Chest X-Ray datasets.
 - **Preprocessing**: Images are resized to `224x224`, converted to tensors, and normalized with standard ImageNet bounds `[0.485, 0.456, 0.406]`.
-- **Explainability**: Custom Grad-CAM implementation extracts feature gradients from `layer4[-1]` to generate spatial heatmaps of "regions of interest", allowing clinicians to trust the CNN output.
+- **Explainability**: Custom Grad-CAM implementation extracts feature gradients from the final dense block to generate spatial heatmaps of "regions of interest", allowing clinicians to trust the CNN output.
 
 ### Symptom Engine (Random Forest / Content-Based RecSys)
 - **Data Preprocessing**: Symptoms are one-hot encoded against a vocabulary of 132 distinct symptoms.
@@ -290,7 +293,7 @@ The backend provides a fully documented Swagger UI at `http://127.0.0.1:8000/doc
 ## 14. Scalability Strategy <a name="scalability-strategy"></a>
 
 - **Stateless Backend**: The FastAPI backend holds zero persistent state, allowing for infinite horizontal scaling behind a standard Load Balancer.
-- **Separation of Compute**: Heavy PyTorch inference is decoupled into `ml_inference/`, allowing future integration with Celery/Redis queues or dedicated GPU-accelerated worker nodes for asynchronous processing.
+- **Separation of Compute**: Heavy PyTorch inference is decoupled into `ml/inference/`, allowing future integration with Celery/Redis queues or dedicated GPU-accelerated worker nodes for asynchronous processing.
 - **Client-Side Caching**: The React frontend utilizes optimized context providers (`MedicalDataContext`) to cache heavy LLM and image Base64 results locally, minimizing redundant API calls.
 
 ---
@@ -331,7 +334,7 @@ graph LR
 *(In Development)*
 Run API unit tests locally using PyTest:
 ```bash
-cd backend
+cd apps/api
 pytest tests/
 ```
 
@@ -373,7 +376,7 @@ Please ensure all tests pass and code adheres to PEP8 standards.
 ## 22. Troubleshooting <a name="troubleshooting"></a>
 
 **Q: I get a `FileNotFoundError` for `disease_model.pkl`.**
-A: Ensure you are running the backend from the `backend/` directory, so `os.getcwd()` aligns with the `ml/models/` relative path injection. Using `run.bat` solves this automatically.
+A: Ensure you are running the backend from the `apps/api/` directory, so `os.getcwd()` aligns with the `ml/models/` relative path injection. Using `run.bat` solves this automatically.
 
 **Q: The LLM Holistic Summary says "Warning: Fallback Triggered".**
 A: You likely forgot to configure your `.env` file with a valid `GEMINI_API_KEY`, or your local machine lacks internet access to reach the Google APIs.

@@ -128,26 +128,15 @@ def predict_disease(symptoms_list, patient_profile=None):
     medications = final_medications
 
     # Real AI Recommendation Engine (Personalization Summary Only)
-    if patient_profile and settings.GEMINI_API_KEY:
+    if patient_profile:
+        import sys
+        sys.path.append(settings.REPO_ROOT)
         try:
-            import google.generativeai as genai
-            genai.configure(api_key=settings.GEMINI_API_KEY)
-            llm = genai.GenerativeModel("gemini-3.6-flash")
-            
-            prompt = (
-                f"You are an AI doctor. Patient Profile: Name={getattr(patient_profile, 'name', 'Patient')}, "
-                f"Age={patient_profile.age}, Gender={patient_profile.gender}, Weight={patient_profile.weight}kg, "
-                f"Height={getattr(patient_profile, 'height', 170)}cm, Pre-existing Conditions={', '.join(patient_profile.conditions)}.\n"
-                f"Symptoms: {', '.join(symptoms_list)}.\n"
-                f"Our ML model predicts: {prediction}.\n\n"
-                "Write a highly personalized, empathetic 3-sentence summary tailored EXACTLY "
-                "to their profile and specific symptoms. DO NOT list medications, just provide the summary paragraph."
-            )
-            res = llm.generate_content(prompt)
-            if res.text:
-                description = f"🤖 AI Personalized Analysis: {res.text.strip()}"
-        except Exception as e:
-            print("Gemini Personalization Error:", e)
+            from packages.ai.services.llm_service import generate_personalized_symptom_summary
+            res_text = generate_personalized_symptom_summary(symptoms_list, prediction, patient_profile)
+            if res_text:
+                description = f"🤖 AI Personalized Analysis: {res_text}"
+        except ImportError:
             pass
     
     return {

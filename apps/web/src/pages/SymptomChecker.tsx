@@ -100,8 +100,15 @@ const Dashboard = () => {
         <div>
           <h1 className="text-3xl font-bold tracking-tight mb-2">Health Dashboard</h1>
           <p className="text-muted-foreground">
-            Select your symptoms to get a personalized health recommendation.
+            Select your symptoms to get an educational health analysis.
           </p>
+          <div className="mt-4 p-4 bg-red-50 border border-red-200 text-red-800 rounded-md text-sm shadow-sm flex items-start gap-3">
+            <AlertTriangle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <strong className="block font-semibold mb-1">MEDICAL DISCLAIMER:</strong>
+              This application is for educational and research purposes ONLY. It is NOT a medical device. It must not be used in clinical, hospital, or diagnostic settings. The AI outputs do not constitute professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider.
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -280,7 +287,7 @@ const Dashboard = () => {
                 onClick={handlePredict} 
                 disabled={loading || selectedSymptoms.length === 0 || !name || age === "" || weight === "" || height === "" || !conditions}
               >
-                {loading ? "Analyzing..." : "Get Recommendation"}
+                {loading ? "Analyzing..." : "Get Educational Insights"}
               </Button>
             </Card>
           </div>
@@ -291,7 +298,7 @@ const Dashboard = () => {
                 <Card className="p-6 border-l-4 border-l-primary bg-card/50 backdrop-blur-sm">
                   <div className="flex items-center gap-3 mb-2">
                     <Activity className="h-6 w-6 text-primary" />
-                    <h2 className="text-2xl font-bold">Predicted Condition: <span className="text-primary">{result.prediction}</span></h2>
+                    <h2 className="text-2xl font-bold">Possible Condition Match: <span className="text-primary">{result.prediction}</span></h2>
                   </div>
                   {result.confidence !== undefined && (
                     <div className="mb-4">
@@ -340,7 +347,7 @@ const Dashboard = () => {
                   <Card className="p-6">
                     <div className="flex items-center gap-2 mb-4">
                       <Pill className="h-5 w-5 text-blue-500" />
-                      <h3 className="text-lg font-semibold">Recommended Medications</h3>
+                      <h3 className="text-lg font-semibold">Candidate Medications <span className="text-xs text-red-500 block">DO NOT PRESCRIBE - Consult a Doctor</span></h3>
                     </div>
                     <ul className="space-y-2">
                       {result.medications.map((item, i) => (
@@ -403,7 +410,7 @@ const Dashboard = () => {
                 <Activity className="h-12 w-12 text-muted-foreground mb-4 opacity-50" />
                 <h3 className="text-xl font-medium text-foreground mb-2">No Data Yet</h3>
                 <p className="text-muted-foreground max-w-sm">
-                  Select your symptoms on the left and click "Get Recommendation" to see your personalized health analysis.
+                  Select your symptoms on the left and click "Get Educational Insights" to see your personalized health analysis.
                 </p>
               </Card>
             )}
