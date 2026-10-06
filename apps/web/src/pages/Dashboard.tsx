@@ -209,41 +209,49 @@ const Dashboard = () => {
               </div>
 
               {primaryScan ? (
-                <div className="grid grid-cols-2 gap-8 flex-1 relative z-10 mb-8 mt-4">
-                  <div className="flex flex-col group">
-                    <div className="flex items-center justify-between mb-3">
-                      <p className="text-sm font-semibold text-foreground flex items-center gap-2">
-                        <ImageIcon className="w-4 h-4 text-muted-foreground" />
-                        Original X-Ray
-                      </p>
+                primaryScan.imageData ? (
+                  <div className="grid grid-cols-2 gap-8 flex-1 relative z-10 mb-8 mt-4">
+                    <div className="flex flex-col group">
+                      <div className="flex items-center justify-between mb-3">
+                        <p className="text-sm font-semibold text-foreground flex items-center gap-2">
+                          <ImageIcon className="w-4 h-4 text-muted-foreground" />
+                          Original X-Ray
+                        </p>
+                      </div>
+                      <div className="relative flex-1 rounded-2xl overflow-hidden bg-black/40 border border-border/50 min-h-[400px] shadow-inner group-hover:border-primary/30 transition-colors">
+                        <img src={primaryScan.imageData} alt="Original" className="absolute inset-0 w-full h-full object-contain p-2" />
+                        <div className="absolute top-3 left-3 bg-background/80 backdrop-blur-md text-foreground text-[10px] font-bold px-2 py-1 rounded shadow-sm border border-border/50">R</div>
+                      </div>
                     </div>
-                    <div className="relative flex-1 rounded-2xl overflow-hidden bg-black/40 border border-border/50 min-h-[400px] shadow-inner group-hover:border-primary/30 transition-colors">
-                      <img src={primaryScan.imageData} alt="Original" className="absolute inset-0 w-full h-full object-contain p-2" />
-                      <div className="absolute top-3 left-3 bg-background/80 backdrop-blur-md text-foreground text-[10px] font-bold px-2 py-1 rounded shadow-sm border border-border/50">R</div>
-                    </div>
-                  </div>
-                  <div className="flex flex-col group">
-                    <div className="flex items-center justify-between mb-3">
-                      <p className="text-sm font-semibold text-primary flex items-center gap-2">
-                        <Zap className="w-4 h-4" />
-                        Grad-CAM Heatmap
-                      </p>
-                    </div>
-                    <div className="relative flex-1 rounded-2xl overflow-hidden bg-black/40 border border-primary/30 min-h-[400px] shadow-[0_0_15px_rgba(var(--primary),0.1)] group-hover:shadow-[0_0_20px_rgba(var(--primary),0.2)] transition-all">
-                      <img src={primaryScan.imageData} alt="Base" className="absolute inset-0 w-full h-full object-contain p-2 opacity-70" />
-                      {primaryScan.gradcamData && (
-                        <img src={primaryScan.gradcamData} alt="Heatmap" className="absolute inset-0 w-full h-full object-contain p-2 mix-blend-screen opacity-100" />
-                      )}
-                      
-                      {/* Elegant Heatmap Legend */}
-                      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2 bg-background/60 backdrop-blur-md p-1.5 rounded-full border border-border/50 shadow-sm">
-                        <span className="text-[9px] font-bold text-foreground uppercase tracking-wider">High</span>
-                        <div className="w-1.5 h-24 rounded-full bg-gradient-to-b from-red-500 via-yellow-400 to-blue-500" />
-                        <span className="text-[9px] font-bold text-foreground uppercase tracking-wider">Low</span>
+                    <div className="flex flex-col group">
+                      <div className="flex items-center justify-between mb-3">
+                        <p className="text-sm font-semibold text-primary flex items-center gap-2">
+                          <Zap className="w-4 h-4" />
+                          Grad-CAM Heatmap
+                        </p>
+                      </div>
+                      <div className="relative flex-1 rounded-2xl overflow-hidden bg-black/40 border border-primary/30 min-h-[400px] shadow-[0_0_15px_rgba(var(--primary),0.1)] group-hover:shadow-[0_0_20px_rgba(var(--primary),0.2)] transition-all">
+                        <img src={primaryScan.imageData} alt="Base" className="absolute inset-0 w-full h-full object-contain p-2 opacity-70" />
+                        {primaryScan.gradcamData && (
+                          <img src={primaryScan.gradcamData} alt="Heatmap" className="absolute inset-0 w-full h-full object-contain p-2 mix-blend-screen opacity-100" />
+                        )}
+                        
+                        {/* Elegant Heatmap Legend */}
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2 bg-background/60 backdrop-blur-md p-1.5 rounded-full border border-border/50 shadow-sm">
+                          <span className="text-[9px] font-bold text-foreground uppercase tracking-wider">High</span>
+                          <div className="w-1.5 h-24 rounded-full bg-gradient-to-b from-red-500 via-yellow-400 to-blue-500" />
+                          <span className="text-[9px] font-bold text-foreground uppercase tracking-wider">Low</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground min-h-[300px] bg-secondary/20 rounded-xl border border-dashed border-border/60 m-2 mt-8 z-10 relative">
+                    <Activity className="w-12 h-12 mb-3 opacity-20 text-primary" />
+                    <p className="font-medium text-foreground mb-1">No imaging data available</p>
+                    <p className="text-sm opacity-70">This analysis was based purely on clinical symptoms and structured data.</p>
+                  </div>
+                )
               ) : (
                 <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground min-h-[300px] bg-secondary/20 rounded-xl border border-dashed border-border/60 m-2">
                   <ImageIcon className="w-12 h-12 mb-3 opacity-20" />
